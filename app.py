@@ -13,5 +13,13 @@ def create():
     session.add_item(request.form['title'])
     return index()
 
+@app.route('/update', methods=['POST'])
+def update():
+    for id in request.form:
+        item = session.get_item(id)
+        item['status'] = 'Complete'
+        session.save_item(item)
+    return index()
+
 if __name__ == '__main__':
     app.run()

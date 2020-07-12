@@ -10,11 +10,29 @@
   <div class="row">
     <div class="col-md-12">
       <h2>Items</h2>
-      <ul class="list-group mb-4">
+      <form action="/update" method="POST">
+      <table>
+        <thead>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Complete</th>
+        </thead>
         {% for item in items %}
-          <li>{{ item.title }}</li>
+        <tbody>
+          <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.status }}</td>
+            <td>
+              {% if item.status != 'Complete' %}
+                <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}">
+              {% endif %}
+            </td>
+          </tr>        
+        </tbody>
         {% endfor %}
-      </ul>
+      </table>
+      <button type="submit">Update Status</button>
+      </form>
     </div>
     <div class="row">
       <div class="col-md-12">
