@@ -22,5 +22,10 @@ def update():
         session.save_item(item)
     return index()
 
+@app.route('/remove/<id>')
+def remove(id):
+    session.remove_item(id)
+    return index()
+
 if __name__ == '__main__':
     app.run()

@@ -67,3 +67,7 @@ def save_item(item):
     session['items'] = updated_items
 
     return item
+
+def remove_item(id):
+    session['items'] = [item for item in get_items() if not (item['id'] == int(id))] 
+    return get_items()
