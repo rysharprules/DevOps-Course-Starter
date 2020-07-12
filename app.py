@@ -6,7 +6,8 @@ app.config.from_object('flask_config.Config')
 
 @app.route('/')
 def index():
-    return render_template('index.html', items=session.get_items())
+    return render_template('index.html', 
+        items=sorted(session.get_items(), key=lambda item: item['status'], reverse=True))
 
 @app.route('/create', methods=['POST'])
 def create():
