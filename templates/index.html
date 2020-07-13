@@ -11,40 +11,52 @@
     <div class="col-md-12">
       <h2>Items</h2>
       <form action="/update" method="POST">
-      <table>
-        <thead>
-          <th>Title</th>
-          <th>Status</th>
-          <th>Complete</th>
-          <th>Remove</th>
-        </thead>
-        {% for item in items %}
-        <tbody>
-          <tr>
-            <td>{{ item.title }}</td>
-            <td>{{ item.status }}</td>
-            <td>
-              {% if item.status != 'Complete' %}
-                <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}">
-              {% endif %}
-            </td>
-            <td><a href="/remove/{{ item.id }}">X</a></td>
-          </tr>        
-        </tbody>
-        {% endfor %}
-      </table>
-      <button type="submit">Update Status</button>
+        <div class="form-group">
+          <table class="table">
+            <thead class="thead-dark">
+              <th>Title</th>
+              <th>Status</th>
+              <th>Complete</th>
+              <th>Remove</th>
+            </thead>
+            {% for item in items %}
+            <tbody>
+              <tr {% if item.status == 'Complete' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
+                <td>{{ item.title }}</td>
+                <td>{{ item.status }}</td>
+                <td>
+                  {% if item.status != 'Complete' %}
+                    <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}">
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="/remove/{{ item.id }}">
+                    <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" />
+                  </a>
+                </td>
+              </tr>        
+            </tbody>
+            {% endfor %}
+          </table><br />
+          <button class="btn btn-dark" type="submit">Update Status</button>
+        </div>
       </form>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <h3>Create an item</h3>
-        <form action="/create" method="POST">
-          <label for="title">Title:</label><br />
-          <input type="text" id="title" name="title" maxlength="32"><br /><br />
-          <button type="submit">Submit</button>
-        </form>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Create an item</h2>
+      <form action="/create" method="POST">
+        <div class="form-group">
+          <div class="form-row">
+            <label class="col-sm-2 col-form-label" for="title">Title</label>
+            <div class="form-group col-md-6">
+          <input class="form-control" type="text" id="title" name="title" maxlength="32" placeholder="New to-do item">
+          </div>
+          </div>
+          <button class="btn btn-dark" type="submit">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
 {% endblock %}
