@@ -2,17 +2,61 @@
 {% block title %}To-Do App{% endblock %}
 
 {% block content %}
-  <div class="jumbotron">
-    <h1 class="display-4">To-Do App</h1>
-    <p class="lead">Just another to-do app.</p>
-  </div>
+<div class="jumbotron">
+  <h1 class="display-4">To-Do App</h1>
+  <p class="lead">Just another to-do app.</p>
+</div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <h2>Items</h2>
-      <ul class="list-group mb-4">
-        <!-- List the todo items here -->
-      </ul>
-    </div>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Items</h2>
+    <form action="/update" method="POST">
+      <div class="form-group">
+        <table class="table">
+          <thead class="thead-dark">
+            <th>Title</th>
+            <th>Status</th>
+            <th>Complete</th>
+            <th>Remove</th>
+          </thead>
+          {% for item in items %}
+            <tbody>
+              <tr {% if item.status == 'Complete' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
+                <td>{{ item.title }}</td>
+                <td>{{ item.status }}</td>
+                <td>
+                  {% if item.status != 'Complete' %}
+                    <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}">
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="/remove/{{ item.id }}">
+                    <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" />
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          {% endfor %}
+        </table><br />
+        <button class="btn btn-dark" type="submit">Update Status</button>
+      </div>
+    </form>
   </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Create an item</h2>
+    <form action="/create" method="POST">
+      <div class="form-group">
+        <div class="form-row">
+          <label class="col-sm-2 col-form-label" for="title">Title</label>
+          <div class="form-group col-md-6">
+            <input required class="form-control" type="text" id="title" name="title" maxlength="280" placeholder="New to-do item">
+          </div>
+        </div>
+        <button class="btn btn-dark" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
