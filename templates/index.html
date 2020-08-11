@@ -15,6 +15,7 @@
           <thead class="thead-dark">
             <th>Title</th>
             <th>Status</th>
+            <th>Complete</th>
             <th>Remove</th>
           </thead>
           {% for item in items %}
@@ -31,6 +32,11 @@
                         </option>
                       {% endfor %}
                     </select>
+                  </td>
+                  <td>
+                    <a href="/complete/{{ item.id }}">
+                      <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" />
+                    </a>
                   </td>
                   <td>
                     <a href="/remove/{{ item.id }}">
