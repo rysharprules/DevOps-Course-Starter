@@ -53,4 +53,4 @@ You should see output similar to the following:
 
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
-Note, the application is flexible enough to handle different [lists](https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-lists-get), but depends on the existence of lists with the titles 'To Do' and 'Done'.
+Note, the application is flexible enough to handle different lists, but currently depends on the existence of a list with the title 'Done' (for the `complete_item` route).

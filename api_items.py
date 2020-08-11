@@ -1,3 +1,5 @@
+from Item import Item
+from Status import Status
 import requests
 import sys
 import os
@@ -13,15 +15,15 @@ QUERY = {
 }
 
 def getApi(path):
-    uri = BASE_URI + path
-    return requests.get(uri, params=QUERY).json()
+    return requests.get(BASE_URI + path, params=QUERY).json()
 
 def getStatuses():
     statuses = []
     for list in getApi(f'1/boards/{BOARD_ID}/lists'):
-        status = {}
-        status['id'] = list['id']
-        status['title'] = list['name']
+        status = Status(
+            list['id'],
+            list['name']
+        )
         statuses.append(status)
     return statuses
 
@@ -29,13 +31,16 @@ def getItemData():
     items = []
     statuses = getStatuses()
     for card in getApi(f'1/boards/{BOARD_ID}/cards'):
-        item = {}
-        item['id'] = card['id']
-        item['title'] = card['name']
-        item['status'] = [status['title']
-                          for status in statuses if card['idList'] == status['id']][0]
+        item = Item(
+            card['id'],
+            card['name'],
+            [status.title for status in statuses if card['idList'] == status.id][0]
+        )
         items.append(item)
     return items, statuses
+
+def getStatusIdForTitle(title):
+    return [status.id for status in getStatuses() if status.title == title][0]
 
 def createItem(title):
     query = QUERY
@@ -47,10 +52,10 @@ def updateItem(id, status):
     query = QUERY
     query['idList'] = status
     requests.put(
-        BASE_URI + '1/cards/{}'.format(id),
+        BASE_URI + f'1/cards/{id}',
         headers={"Accept": "application/json"},
         params=query
     )
 
 def removeItem(id):
-    requests.delete(BASE_URI + '1/cards/{}'.format(id), params=QUERY)
+    requests.delete(BASE_URI + f'1/cards/{id}', params=QUERY)
