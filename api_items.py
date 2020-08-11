@@ -34,7 +34,8 @@ def getItemData():
         item = Item(
             card['id'],
             card['name'],
-            [status.title for status in statuses if card['idList'] == status.id][0]
+            [status.title for status in statuses if card['idList'] == status.id][0],
+            card['desc']
         )
         items.append(item)
     return items, statuses
@@ -42,10 +43,11 @@ def getItemData():
 def getStatusIdForTitle(title):
     return [status.id for status in getStatuses() if status.title == title][0]
 
-def createItem(title):
+def createItem(title, description=""):
     query = QUERY
-    query['idList'] = getStatuses()[0]
+    query['idList'] = getStatuses()[0].id
     query['name'] = title
+    query['desc'] = description
     requests.post(BASE_URI + '1/cards', params=query)
 
 def updateItem(id, status):

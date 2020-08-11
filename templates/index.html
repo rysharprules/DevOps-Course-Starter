@@ -13,7 +13,7 @@
       <div class="form-group">
         <table class="table">
           <thead class="thead-dark">
-            <th>Title</th>
+            <th>Item</th>
             <th>Status</th>
             <th>Complete</th>
             <th>Remove</th>
@@ -22,7 +22,12 @@
             <tbody>
               <form action="/update" method="POST">
                 <tr {% if item.status == 'Done' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
-                  <td>{{ item.title }}</td>
+                  <td>
+                    <strong>{{ item.title }}</strong>
+                    {% if item.description %}
+                      <br />{{ item.description }}
+                    {% endif %}
+                  </td>
                   <td>
                     <input id="id" name="id" type="hidden" value="{{ item.id }}">
                     <select name="status" id="status" onchange="this.form.submit()">
@@ -56,13 +61,22 @@
     <h2>Create an item</h2>
     <form action="/create" method="POST">
       <div class="form-group">
-        <div class="form-row">
-          <label class="col-sm-2 col-form-label" for="title">Title</label>
-          <div class="form-group col-md-6">
-            <input required class="form-control" type="text" id="title" name="title" maxlength="280" placeholder="New to-do item">
+        <fieldset>
+          <legend>New item details</legend>
+          <div class="form-row">
+            <label class="col-sm-2 col-form-label" for="title">Title:</label>
+            <div class="form-group col-md-6">
+              <input required class="form-control" type="text" id="title" name="title" maxlength="280" placeholder="New to-do item">
+            </div>
           </div>
-        </div>
-        <button class="btn btn-dark" type="submit">Submit</button>
+          <div class="form-row">
+            <label class="col-sm-2 col-form-label" for="desc">Description (Optional):</label>
+            <div class="form-group col-md-6">
+              <textarea class="form-control" type="text" id="desc" name="desc" rows="3" cols="80" maxlength="280"></textarea>
+            </div>
+          </div>
+          <button class="btn btn-dark" type="submit">Submit</button>
+        </fieldset>
       </div>
     </form>
   </div>
