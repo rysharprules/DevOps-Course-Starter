@@ -1,57 +1,82 @@
 from flask import Flask, render_template, request, redirect, url_for
+from dotenv import load_dotenv
 import session_items as session
 import requests
 import sys
+import os
 
 app = Flask(__name__)
 app.config.from_object('flask_config.Config')
 
+API_KEY = os.environ.get("API_KEY", None)
+API_TOKEN = os.environ.get("API_TOKEN", None)
+
 BOARD_ID = "NSn3rIEE"
 BASE_URI = "https://api.trello.com/"
 QUERY = {
-   'key': '2caf651274e82aaad6db16b36a32631a',
-   'token': 'd3fa3f8b7f9706afed48b78175d1c76239df1425d5334ea4ff0e170b508be9e6'
+    'key': API_KEY,
+    'token': API_TOKEN
 }
 
-def getData(path):
+def getApi(path):
     uri = BASE_URI + path
     return requests.get(uri, params=QUERY).json()
 
-@app.route('/')
-def index():
-    cards = getData(f'1/boards/{BOARD_ID}/cards')
-    lists = getData(f'1/boards/{BOARD_ID}/lists')
+def getStatuses():
     statuses = []
-    for list in lists:
+    for list in getApi(f'1/boards/{BOARD_ID}/lists'):
         status = {}
         status['id'] = list['id']
         status['title'] = list['name']
+        status['initial'] = list['name'] == 'To Do'
         statuses.append(status)
+    return statuses
+
+def getData():
     items = []
-    for card in cards:
+    statuses = getStatuses()
+    for card in getApi(f'1/boards/{BOARD_ID}/cards'):
         item = {}
         item['id'] = card['id']
         item['title'] = card['name']
-        item['status'] = [status['title'] for status in statuses if card['idList'] == status['id']][0]
+        item['status'] = [status['title']
+                          for status in statuses if card['idList'] == status['id']][0]
         items.append(item)
+    return items, statuses
+
+@app.route('/')
+def index():
+    items, statuses = getData()
     return render_template('index.html', items=items, statuses=statuses)
 
 @app.route('/create', methods=['POST'])
 def create():
-    session.add_item(request.form['title'])
+    uri = BASE_URI + '1/cards'
+    query = QUERY
+    query['idList'] = [status['id'] for status in getStatuses() if status['initial']][0]
+    query['name'] = request.form['title']
+    requests.post(uri, params=query)
     return index()
 
 @app.route('/update', methods=['POST'])
 def update():
-    for id in request.form:
-        item = session.get_item(id)
-        item['status'] = 'Complete'
-        session.save_item(item)
+    uri = BASE_URI + '1/cards/{}'.format(request.form['id'])
+    headers = {
+        "Accept": "application/json"
+    }
+    query = QUERY
+    query['idList'] = request.form['status']
+    requests.put(
+        uri,
+        headers=headers,
+        params=query
+    )
     return index()
 
 @app.route('/remove/<id>')
 def remove(id):
-    session.remove_item(id)
+    uri = BASE_URI + '1/cards/{}'.format(id)
+    requests.delete(uri, params=QUERY)
     return index()
 
 if __name__ == '__main__':

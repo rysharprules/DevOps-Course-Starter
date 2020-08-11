@@ -10,37 +10,39 @@
 <div class="row">
   <div class="col-md-12">
     <h2>Items</h2>
-    <form action="/update" method="POST">
       <div class="form-group">
         <table class="table">
           <thead class="thead-dark">
             <th>Title</th>
             <th>Status</th>
-            <th>Complete</th>
             <th>Remove</th>
           </thead>
           {% for item in items %}
             <tbody>
-              <tr {% if item.status == 'Done' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
-                <td>{{ item.title }}</td>
-                <td>{{ item.status }}</td>
-                <td>
-                  {% if item.status != 'Complete' %}
-                    <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}">
-                  {% endif %}
-                </td>
-                <td>
-                  <a href="/remove/{{ item.id }}">
-                    <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" />
-                  </a>
-                </td>
-              </tr>
+              <form action="/update" method="POST">
+                <tr {% if item.status == 'Done' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
+                  <td>{{ item.title }}</td>
+                  <td>
+                    <input id="id" name="id" type="hidden" value="{{ item.id }}">
+                    <select name="status" id="status" onchange="this.form.submit()">
+                      {% for status in statuses %}
+                        <option value="{{ status.id }}" {% if item.status == status.title %} selected {% endif %}>
+                          {{ status.title }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                  <td>
+                    <a href="/remove/{{ item.id }}">
+                      <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" />
+                    </a>
+                  </td>
+                </tr>
+              </form>
             </tbody>
           {% endfor %}
         </table><br />
-        <button class="btn btn-dark" type="submit">Update Status</button>
       </div>
-    </form>
   </div>
 </div>
 <div class="row">
