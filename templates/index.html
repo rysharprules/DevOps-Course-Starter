@@ -15,6 +15,7 @@
           <thead class="thead-dark">
             <th>Item</th>
             <th>Status</th>
+            <th>Due</th>
             <th>Complete</th>
             <th>Remove</th>
           </thead>
@@ -38,10 +39,17 @@
                       {% endfor %}
                     </select>
                   </td>
+                  <td {% if item.overdue %} class="bg-warning" {% endif %}>
+                    {% if item.status != 'Done' %}
+                      {{ item.dueFormatted }}
+                    {% endif %}
+                  </td>
                   <td>
-                    <a href="/complete/{{ item.id }}">
-                      <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" />
-                    </a>
+                    {% if item.status != 'Done' %}
+                      <a href="/complete/{{ item.id }}">
+                        <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" />
+                      </a>
+                    {% endif %}
                   </td>
                   <td>
                     <a href="/remove/{{ item.id }}">
@@ -59,10 +67,10 @@
 <div class="row">
   <div class="col-md-12">
     <h2>Create an item</h2>
-    <form action="/create" method="POST">
+    <form action="/create" method="POST" autocomplete="off">
       <div class="form-group">
         <fieldset>
-          <legend>New item details</legend>
+          <legend>New item details:</legend>
           <div class="form-row">
             <label class="col-sm-2 col-form-label" for="title">Title:</label>
             <div class="form-group col-md-6">
@@ -75,10 +83,28 @@
               <textarea class="form-control" type="text" id="desc" name="desc" rows="3" cols="80" maxlength="280"></textarea>
             </div>
           </div>
+          <div class="form-row">
+            <label class="col-sm-2 col-form-label" for="due">Due date (Optional):</label>
+            <div class="form-group col-md-6">
+                <div class="input-group date">
+                  <div class="input-group-append">
+                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                  </div>
+                  <input id="due" name="due" type="text" class="form-control" placeholder="mm/dd/yyyy">
+              </div>
+            </div>
+          </div>
           <button class="btn btn-dark" type="submit">Submit</button>
         </fieldset>
       </div>
     </form>
   </div>
 </div>
+<script>
+  $("#due").datepicker({
+    startDate: '-0d',
+    changeMonth: true,
+    format: "mm/dd/yyyy"
+  });
+</script>
 {% endblock %}
