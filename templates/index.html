@@ -86,11 +86,10 @@
           <div class="form-row">
             <label class="col-sm-2 col-form-label" for="due">Due date (Optional):</label>
             <div class="form-group col-md-6">
-                <div class="input-group date">
-                  <div class="input-group-append">
-                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                  </div>
-                  <input id="due" name="due" type="text" class="form-control" placeholder="mm/dd/yyyy">
+              <div class="input-group date">
+                <div class="col-xs-2">
+                  <input id="due" name="due" type="text" class="form-control cal-icon" placeholder="mm/dd/yyyy">
+                </div>
               </div>
             </div>
           </div>
@@ -104,7 +103,8 @@
   $("#due").datepicker({
     startDate: '-0d',
     changeMonth: true,
-    format: "mm/dd/yyyy"
+    format: "mm/dd/yyyy",
+    weekStart: 1
   });
 </script>
 {% endblock %}
