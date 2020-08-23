@@ -13,22 +13,24 @@
       <div class="form-group">
         <table class="table">
           <thead class="thead-dark">
-            <th>Item</th>
-            <th>Status</th>
-            <th>Due</th>
+            {% for status in statuses %}
+              <th>{{ status.title }}</th>
+            {% endfor %}
+            <th>Update Status</th>
             <th>Complete</th>
             <th>Remove</th>
           </thead>
           {% for item in items %}
             <tbody>
               <form action="/update" method="POST">
-                <tr {% if item.status == 'Done' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
-                  <td>
-                    <strong>{{ item.title }}</strong>
-                    {% if item.description %}
-                      <br />{{ item.description }}
-                    {% endif %}
-                  </td>
+                <tr>
+                  {% for status in statuses %}
+                    <td class="status-col">
+                      {% if item.status == status.title %}
+                        {% include 'item.html' %}
+                      {% endif %}
+                    </td>
+                  {% endfor %}
                   <td>
                     <input id="id" name="id" type="hidden" value="{{ item.id }}">
                     <select name="status" id="status" onchange="this.form.submit()">
@@ -38,11 +40,6 @@
                         </option>
                       {% endfor %}
                     </select>
-                  </td>
-                  <td {% if item.overdue %} class="bg-warning" {% endif %}>
-                    {% if item.status != 'Done' %}
-                      {{ item.dueFormatted }}
-                    {% endif %}
                   </td>
                   <td>
                     {% if item.status != 'Done' %}
@@ -60,7 +57,7 @@
               </form>
             </tbody>
           {% endfor %}
-        </table><br />
+        </table>
       </div>
   </div>
 </div>

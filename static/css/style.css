@@ -1,0 +1,33 @@
+.item {
+    border: 2px solid #222;
+    text-align: center;
+    min-width: 12vw;
+    max-width: 14vw;
+    min-height: 11vw; 
+}
+
+.item-content {
+    font-weight: bold;
+    padding-top: 10%;
+}
+
+.item-content > div {
+    text-align: left;
+    display: block;
+    font-size: 0.9em;
+    font-weight: normal;
+    padding: 3%;
+}
+
+.status-col {
+    min-width: 12vw;
+}
+
+/* using font-awesome as glyphicons not in BS4 */
+.cal-icon {
+    padding-right: calc(1.5em + .75rem);
+    background-image: url('https://use.fontawesome.com/releases/v5.14.0/svgs/regular/calendar-alt.svg');
+    background-repeat: no-repeat;
+    background-position: center right calc(.375em + .1875rem);
+    background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}

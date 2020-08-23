@@ -1,0 +1,17 @@
+<div class="item {% if item.overdue %} bg-warning {% elif item.status == 'Done' %} bg-success {% else %} bg-info {% endif %} text-light">
+    <div class="item-content">
+        {{ item.title }}
+        {% if item.description %}
+            <div>
+                <span class="fas fa-comment-alt"></span>
+                {{ item.description }}
+            </div>
+        {% endif %}
+        {% if item.status != 'Done' %}
+            <div>
+                <span class="fas fa-calendar-alt"></span>
+                {{ item.dueFormatted }}
+            </div>
+        {% endif %}
+    </div>
+</div>
