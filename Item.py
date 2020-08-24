@@ -2,18 +2,27 @@ import datetime
 
 class Item:
 
-    def parseDue(self, due):
-        dueFormatted = "No Due Date"
-        overdue = False
-        if due:
-            dueDate = datetime.datetime.strptime(due, '%Y-%m-%dT%H:%M:%S.%f%z')
-            dueFormatted = dueDate.strftime("%d/%m/%Y")
-            overdue = self.status != 'Done' and dueDate.date() <= datetime.date.today()
-        return dueFormatted, overdue
+    def getFormattedDueDate(self):
+        hasDueDate, dueDate = self.getDueDate()
+        if hasDueDate:
+            return dueDate.strftime("%d/%m/%Y")
+        return dueDate
 
-    def __init__(self, id, title, status, description="", due=""):
+    def isOverdue(self):
+        hasDueDate, dueDate = self.getDueDate()
+        if hasDueDate:
+            return self.status != 'Done' and dueDate.date() <= datetime.date.today()
+        return False
+
+    def getDueDate(self):
+        try:
+            return True, datetime.datetime.strptime(self.due, '%Y-%m-%dT%H:%M:%S.%f%z')
+        except (ValueError, TypeError) as e:
+            return False, "No Due Date"
+
+    def __init__(self, id, title, status, description, due):
         self.id = id
         self.title = title
         self.status = status
         self.description = description
-        self.dueFormatted, self.overdue = self.parseDue(due)
+        self.due = due
