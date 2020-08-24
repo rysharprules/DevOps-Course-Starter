@@ -52,3 +52,7 @@ You should see output similar to the following:
 ```
 
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+#### `Done` status
+
+This application relies on the existence of a List on Trello board named "`Done`" (part of the default set). It is used when marking items as complete.
