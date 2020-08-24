@@ -10,53 +10,101 @@
 <div class="row">
   <div class="col-md-12">
     <h2>Items</h2>
-    <form action="/update" method="POST">
       <div class="form-group">
         <table class="table">
           <thead class="thead-dark">
-            <th>Title</th>
+            <th>Item</th>
             <th>Status</th>
+            <th>Due</th>
             <th>Complete</th>
             <th>Remove</th>
           </thead>
           {% for item in items %}
             <tbody>
-              <tr {% if item.status == 'Complete' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
-                <td>{{ item.title }}</td>
-                <td>{{ item.status }}</td>
-                <td>
-                  {% if item.status != 'Complete' %}
-                    <input type="checkbox" id="{{ item.id }}" name="{{ item.id }}">
-                  {% endif %}
-                </td>
-                <td>
-                  <a href="/remove/{{ item.id }}">
-                    <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" />
-                  </a>
-                </td>
-              </tr>
+              <form action="/update" method="POST">
+                <tr {% if item.status == 'Done' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
+                  <td>
+                    <strong>{{ item.title }}</strong>
+                    {% if item.description %}
+                      <br />{{ item.description }}
+                    {% endif %}
+                  </td>
+                  <td>
+                    <input id="id" name="id" type="hidden" value="{{ item.id }}">
+                    <select name="status" id="status" onchange="this.form.submit()">
+                      {% for status in statuses %}
+                        <option value="{{ status.id }}" {% if item.status == status.title %} selected {% endif %}>
+                          {{ status.title }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                  <td {% if item.isOverdue() %} class="bg-warning" {% endif %}>
+                    {% if item.status != 'Done' %}
+                      {{ item.getFormattedDueDate() }}
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if item.status != 'Done' %}
+                      <a href="/complete/{{ item.id }}">
+                        <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" />
+                      </a>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <a href="/remove/{{ item.id }}">
+                      <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" />
+                    </a>
+                  </td>
+                </tr>
+              </form>
             </tbody>
           {% endfor %}
         </table><br />
-        <button class="btn btn-dark" type="submit">Update Status</button>
       </div>
-    </form>
   </div>
 </div>
 <div class="row">
   <div class="col-md-12">
     <h2>Create an item</h2>
-    <form action="/create" method="POST">
+    <form action="/create" method="POST" autocomplete="off">
       <div class="form-group">
-        <div class="form-row">
-          <label class="col-sm-2 col-form-label" for="title">Title</label>
-          <div class="form-group col-md-6">
-            <input required class="form-control" type="text" id="title" name="title" maxlength="280" placeholder="New to-do item">
+        <fieldset>
+          <legend>New item details:</legend>
+          <div class="form-row">
+            <label class="col-sm-2 col-form-label" for="title">Title:</label>
+            <div class="form-group col-md-6">
+              <input required class="form-control" type="text" id="title" name="title" maxlength="280" placeholder="New to-do item">
+            </div>
           </div>
-        </div>
-        <button class="btn btn-dark" type="submit">Submit</button>
+          <div class="form-row">
+            <label class="col-sm-2 col-form-label" for="desc">Description (Optional):</label>
+            <div class="form-group col-md-6">
+              <textarea class="form-control" type="text" id="desc" name="desc" rows="3" cols="80" maxlength="280"></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="col-sm-2 col-form-label" for="due">Due date (Optional):</label>
+            <div class="form-group col-md-6">
+              <div class="input-group date">
+                <div class="col-xs-2">
+                  <input id="due" name="due" type="text" class="form-control cal-icon" placeholder="mm/dd/yyyy">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-dark" type="submit">Submit</button>
+        </fieldset>
       </div>
     </form>
   </div>
 </div>
+<script>
+  $("#due").datepicker({
+    startDate: '-0d',
+    changeMonth: true,
+    format: "mm/dd/yyyy",
+    weekStart: 1
+  });
+</script>
 {% endblock %}
