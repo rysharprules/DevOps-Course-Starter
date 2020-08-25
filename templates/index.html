@@ -11,56 +11,30 @@
   <div class="col-md-12">
     <h2>Items</h2>
       <div class="form-group">
-        <table class="table">
+        <table class="table table-borderless" id="todo-table">
           <thead class="thead-dark">
             {% for status in statuses %}
               <th>{{ status.title }}</th>
             {% endfor %}
-            <th>Update Status</th>
-            <th>Complete</th>
-            <th>Remove</th>
           </thead>
-          {% for item in items %}
             <tbody>
-              <form action="/update" method="POST">
                 <tr>
                   {% for status in statuses %}
-                    <td class="status-col">
-                      {% if item.status == status.title %}
-                        {% include 'item.html' %}
-                      {% endif %}
+                    <td class="status-col" id="{{ status.id }}">
+                      {% for item in items %}
+                        {% if item.status == status.title %}
+                          {% include 'item.html' %}
+                        {% endif %}
+                      {% endfor %}
                     </td>
                   {% endfor %}
-                  <td>
-                    <input id="id" name="id" type="hidden" value="{{ item.id }}">
-                    <select name="status" id="status" onchange="this.form.submit()">
-                      {% for status in statuses %}
-                        <option value="{{ status.id }}" {% if item.status == status.title %} selected {% endif %}>
-                          {{ status.title }}
-                        </option>
-                      {% endfor %}
-                    </select>
-                  </td>
-                  <td>
-                    {% if item.status != 'Done' %}
-                      <a href="/complete/{{ item.id }}">
-                        <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" />
-                      </a>
-                    {% endif %}
-                  </td>
-                  <td>
-                    <a href="/remove/{{ item.id }}">
-                      <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" />
-                    </a>
-                  </td>
                 </tr>
-              </form>
             </tbody>
-          {% endfor %}
         </table>
       </div>
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-12">
     <h2>Create an item</h2>
@@ -103,5 +77,21 @@
     format: "mm/dd/yyyy",
     weekStart: 1
   });
+  $( function() {
+    $( ".status-col" ).sortable({
+      connectWith: ".status-col",
+      handle: ".item-content",
+      receive: function(event, ui) {
+        const form = document.getElementById('update-item-' + ui.item[0].id);
+        $("<input />").attr("type", "hidden")
+          .attr("id", "temp")
+          .attr("name", "status")
+          .attr("value", this.id)
+          .appendTo(form);
+        form.submit();
+        $("#temp").remove();
+      }
+    });
+  } );
 </script>
 {% endblock %}
