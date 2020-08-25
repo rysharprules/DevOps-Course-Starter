@@ -1,9 +1,9 @@
 .item {
     border: 2px solid #222;
     text-align: center;
-    min-width: 12vw;
-    max-width: 14vw;
-    min-height: 11vw; 
+    min-width: 10vw;
+    max-width: 12vw;
+    min-height: 9vw; 
 }
 
 .item-content {
