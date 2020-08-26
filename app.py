@@ -1,16 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for
 from api_items import getItemData, createItem, updateItem, removeItem, getStatusIdForTitle
+from ViewModel import ViewModel
 import sys
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    items, statuses = getItemData()
     return render_template(
         'index.html',
-        items=sorted(items, key=lambda item: item.status),
-        statuses=statuses
+        view_model=ViewModel(*getItemData())
     )
 
 @app.route('/create', methods=['POST'])

@@ -10,28 +10,26 @@
 <div class="row">
   <div class="col-md-12">
     <h2>Items</h2>
-      <div class="form-group">
-        <table class="table table-borderless" id="todo-table">
-          <thead class="thead-dark">
-            {% for status in statuses %}
-              <th>{{ status.title }}</th>
-            {% endfor %}
-          </thead>
-            <tbody>
-                <tr>
-                  {% for status in statuses %}
-                    <td class="status-col" id="{{ status.id }}">
-                      {% for item in items %}
-                        {% if item.status == status.title %}
-                          {% include 'item.html' %}
-                        {% endif %}
-                      {% endfor %}
-                    </td>
-                  {% endfor %}
-                </tr>
-            </tbody>
-        </table>
-      </div>
+      <table class="table table-borderless" id="todo-table">
+        <thead class="thead-dark">
+          {% for status in view_model.statuses %}
+            <th>{{ status.title }}</th>
+          {% endfor %}
+        </thead>
+          <tbody>
+              <tr>
+                {% for status in view_model.statuses %}
+                  <td class="status-col" id="{{ status.id }}">
+                    {% for item in view_model.items %}
+                      {% if item.status == status.title %}
+                        {% include 'item.html' %}
+                      {% endif %}
+                    {% endfor %}
+                  </td>
+                {% endfor %}
+              </tr>
+          </tbody>
+      </table>
   </div>
 </div>
 
@@ -70,6 +68,7 @@
     </form>
   </div>
 </div>
+
 <script>
   $("#due").datepicker({
     startDate: '-0d',
@@ -77,12 +76,12 @@
     format: "mm/dd/yyyy",
     weekStart: 1
   });
-  $( function() {
-    $( ".status-col" ).sortable({
+  $(function() {
+    $(".status-col").sortable({
       connectWith: ".status-col",
       handle: ".item-content",
       receive: function(event, ui) {
-        const form = document.getElementById('update-item-' + ui.item[0].id);
+        const form = document.getElementById("update-item-" + ui.item[0].id);
         $("<input />").attr("type", "hidden")
           .attr("id", "temp")
           .attr("name", "status")
@@ -92,6 +91,6 @@
         $("#temp").remove();
       }
     });
-  } );
+  });
 </script>
 {% endblock %}
