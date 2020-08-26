@@ -12,19 +12,29 @@
     <h2>Items</h2>
       <table class="table table-borderless" id="todo-table">
         <thead class="thead-dark">
-          {% for status in view_model.statuses %}
-            <th>{{ status.title }}</th>
-          {% endfor %}
+          <th>To Do</th>
+          <th>Doing</th>
+          <th>Done</th>
         </thead>
           <tbody>
               <tr>
-                {% for status in view_model.statuses %}
+                {% for status in view_model.getBoardStatuses() %}
                   <td class="status-col" id="{{ status.id }}">
-                    {% for item in view_model.items %}
-                      {% if item.status == status.title %}
+                    {% if status.title == 'To Do' %}
+                      {% for item in view_model.getToDoItems() %}
                         {% include 'item.html' %}
-                      {% endif %}
-                    {% endfor %}
+                      {% endfor %}
+                    {% endif %}
+                    {% if status.title == 'Doing' %}
+                      {% for item in view_model.getDoingItems() %}
+                        {% include 'item.html' %}
+                      {% endfor %}
+                    {% endif %}
+                    {% if status.title == 'Done' %}
+                      {% for item in view_model.getDoneItems() %}
+                        {% include 'item.html' %}
+                      {% endfor %}
+                    {% endif %}
                   </td>
                 {% endfor %}
               </tr>

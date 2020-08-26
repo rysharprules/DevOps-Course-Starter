@@ -45,7 +45,7 @@ def getStatusIdForTitle(title):
     return [status.id for status in getStatuses() if status.title == title][0]
 
 def createItem(title, description="", due=""):
-    query = QUERY
+    query = QUERY.copy()
     query['idList'] = getStatuses()[0].id
     query['name'] = title
     query['desc'] = description
@@ -53,7 +53,7 @@ def createItem(title, description="", due=""):
     requests.post(BASE_URI + '1/cards', params=query)
 
 def updateItem(id, status):
-    query = QUERY
+    query = QUERY.copy()
     query['idList'] = status
     requests.put(
         BASE_URI + f'1/cards/{id}',
