@@ -5,11 +5,15 @@ import sys
 
 app = Flask(__name__)
 
+view_model = None
+
 @app.route('/')
 def index():
+    global view_model
+    view_model = ViewModel(*getItemData())
     return render_template(
         'index.html',
-        view_model=ViewModel(*getItemData())
+        view_model=view_model
     )
 
 @app.route('/create', methods=['POST'])
@@ -31,6 +35,15 @@ def complete_item(id):
 def remove(id):
     removeItem(id)
     return index()
+
+@app.route('/toggle-done/<toggle>')
+def toggle_done(toggle):
+    view_model.show_all_done_items = toggle == 'true'
+    return render_template(
+        'index.html',
+        view_model=view_model
+    )
+    
 
 if __name__ == '__main__':
     app.run()

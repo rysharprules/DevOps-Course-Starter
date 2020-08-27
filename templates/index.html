@@ -14,7 +14,16 @@
         <thead class="thead-dark">
           <th>To Do</th>
           <th>Doing</th>
-          <th>Done</th>
+          <th>
+            Done
+            <div class="toggle-done">
+              {% if view_model.show_all_done_items %}
+                <a href="/toggle-done/false"><span class="fas fa-eye-slash"></span> Hide old done items</a>
+              {% else %}
+                <a href="/toggle-done/true"><span class="fas fa-eye"></span> Show all done items</a>
+              {% endif %}
+            </div>
+          </th>
         </thead>
           <tbody>
               <tr>

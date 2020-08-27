@@ -46,6 +46,15 @@ table td {
     float: right;
 }
 
+.toggle-done {
+    float: right
+}
+
+.toggle-done > a {
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
 .bg-complete {
     background-color: #93c47d;
 }
