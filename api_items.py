@@ -36,7 +36,8 @@ def getItemData():
             card['name'],
             [status.title for status in statuses if card['idList'] == status.id][0],
             card['desc'],
-            card['due']
+            card['due'],
+            card['dateLastActivity']
         )
         items.append(item)
     return items, statuses
@@ -46,7 +47,7 @@ def getStatusIdForTitle(title):
 
 def createItem(title, description="", due=""):
     query = QUERY.copy()
-    query['idList'] = getStatuses()[0].id
+    query['idList'] = getStatusIdForTitle('To Do')
     query['name'] = title
     query['desc'] = description
     query['due'] = due

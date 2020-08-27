@@ -53,6 +53,6 @@ You should see output similar to the following:
 
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
-#### `Done` status
+#### Statuses
 
-This application relies on the existence of a List on Trello board named "`Done`" (part of the default set). It is used when marking items as complete.
+This application relies on the existence of Lists on the Trello board named "`To Do`", "`Doing`", and "`Done`" (the default set). The code is extendable to use further lists by calling `statuses` directly from the `ViewModel` rather than the `board_statuses` subset (the default set) returned by `getBoardStatuses`. "`Done`" is still required to facilitate the `/complete/<id>` route. An alternative solution for this would be to simply set the "complete" item with the _last_ status in the list of statuses returned from Trello, e.g. `item['status'] = getStatuses()[-1].title`. Another solution would be to remove the route as the functionality to mark a task as "complete" is fulfilled by the drag and drop feature.
