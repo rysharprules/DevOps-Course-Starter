@@ -143,7 +143,8 @@ def test_filterItemsByDoneDate_today(done_items):
     done_view_model = ViewModel(done_items, statuses)
 
     # when
-    results = done_view_model.filterItemsByDoneDate(datetime.date.today())
+    results = done_view_model.filterItemsByDoneDate(
+        done_items, datetime.date.today())
 
     # then
     assert len(results) == 1
@@ -156,7 +157,7 @@ def test_filterItemsByDoneDate_yesterday(done_items):
 
     # when
     yesterday = datetime.date.today() - datetime.timedelta(days=1)
-    results = done_view_model.filterItemsByDoneDate(yesterday)
+    results = done_view_model.filterItemsByDoneDate(done_items, yesterday)
 
     # then
     assert len(results) == 4

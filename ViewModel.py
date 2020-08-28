@@ -35,10 +35,10 @@ class ViewModel:
         return self.filterItemsByStatus(self.getStatusWithTitle(ViewModel.board_statuses[1]))
 
     def getDoneItems(self):
-        allItems = self.getAllDoneItems()
-        if len(allItems) < 5 or self.show_all_done_items:
-            return allItems
-        return self.filterItemsByDoneDate(date.today())
+        allDoneItems = self.getAllDoneItems()
+        if len(allDoneItems) < 5 or self.show_all_done_items:
+            return allDoneItems
+        return self.filterItemsByDoneDate(allDoneItems, date.today())
 
     def getAllDoneItems(self):
         return self.filterItemsByStatus(self.getStatusWithTitle(ViewModel.board_statuses[2]))
@@ -46,8 +46,8 @@ class ViewModel:
     def getStatusWithTitle(self, title):
         return [status for status in self.statuses if status.title == title][0]
 
-    def filterItemsByDoneDate(self, doneDate):
-        return [item for item in self.items if date(int(item.done[:4]), int(item.done[5:7]), int(item.done[8:10])) == doneDate]
+    def filterItemsByDoneDate(self, items, doneDate):
+        return [item for item in items if date(int(item.done[:4]), int(item.done[5:7]), int(item.done[8:10])) == doneDate]
 
     def filterItemsByStatus(self, status):
         return [item for item in self.items if item.status == status.title]
