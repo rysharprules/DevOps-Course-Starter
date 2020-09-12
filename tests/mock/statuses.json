@@ -1,0 +1,46 @@
+[{
+        "id": "5f3198c679d5cd7b3a8f93e9",
+        "name": "To Do",
+        "closed": false,
+        "pos": 16384,
+        "softLimit": null,
+        "idBoard": "5f3198c679d5cd7b3a8f93e8",
+        "subscribed": false
+    },
+    {
+        "id": "5f31bdf7a179fe32ee4ca8d2",
+        "name": "Unlikely To Do",
+        "closed": false,
+        "pos": 24576,
+        "softLimit": null,
+        "idBoard": "5f3198c679d5cd7b3a8f93e8",
+        "subscribed": false
+    },
+    {
+        "id": "5f3198c679d5cd7b3a8f93ea",
+        "name": "Doing",
+        "closed": false,
+        "pos": 26624,
+        "softLimit": null,
+        "idBoard": "5f3198c679d5cd7b3a8f93e8",
+        "subscribed": false
+    },
+    {
+        "id": "5f32bf15e25f380ec32344cf",
+        "name": "Still Doing",
+        "closed": false,
+        "pos": 28672,
+        "softLimit": null,
+        "idBoard": "5f3198c679d5cd7b3a8f93e8",
+        "subscribed": false
+    },
+    {
+        "id": "5f3198c679d5cd7b3a8f93eb",
+        "name": "Done",
+        "closed": false,
+        "pos": 49152,
+        "softLimit": null,
+        "idBoard": "5f3198c679d5cd7b3a8f93e8",
+        "subscribed": false
+    }
+]
