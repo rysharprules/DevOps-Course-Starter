@@ -37,7 +37,7 @@ def mock_get(*args, **kwargs):
     else:  # elif "cards" in args[0]:
         return MockItemResponse()
 
-def test_index_page(monkeypatch, client):
+def test_index(monkeypatch, client):
     monkeypatch.setattr(requests, "get", mock_get)
 
     response = client.get('/')
@@ -46,3 +46,23 @@ def test_index_page(monkeypatch, client):
     assert "Buy recycled mango scented candles" in str(response.data)
     assert "Calmly collaborate and agree on an effective plan of action" in str(
         response.data)
+
+
+def test_create(monkeypatch, client):
+    args = []
+    test_title = 'test_title'
+    test_desc = 'test_desc'
+    test_due = 'test_due'
+    test_status = 'test_todo_status'
+    monkeypatch.setattr(requests, "post", lambda *a, **k: args.append(k['params']))
+    monkeypatch.setattr(requests, "get", mock_get)
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    params = {'title': test_title, 'desc': test_desc, 'due': test_due}
+    response = client.post('/create', headers=headers, data=params)
+
+    assert response.status_code == 200
+    assert len(args[0]) == 6 # includes key and token
+    assert args[0]['name'] == test_title
+    assert args[0]['desc'] == test_desc
+    assert args[0]['due'] == test_due
+    assert args[0]['idList'] == test_status
