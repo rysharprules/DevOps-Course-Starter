@@ -1,8 +1,8 @@
-import os
 from threading import Thread
-import app
-import requests
 from selenium import webdriver
+import os
+import pytest
+import app
 
 @pytest.fixture(scope='module')
 def test_app():
@@ -23,7 +23,7 @@ def test_app():
 
 @pytest.fixture(scope="module")
 def driver():
-    with webdriver.Firefox() as driver
+    with webdriver.Firefox() as driver:
         yield driver
 
 def test_task_journey(driver, test_app):
