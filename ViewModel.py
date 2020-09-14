@@ -51,5 +51,3 @@ class ViewModel:
 
     def filterItemsByStatus(self, status):
         return [item for item in self.items if item.status == status.title]
-
-

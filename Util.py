@@ -62,3 +62,11 @@ class Util:
     def removeItem(self, id):
         requests.delete(
             self.base_uri + f'1/cards/{id}', params=self.query)
+
+    def create_trello_board(self):
+        query = self.query.copy()
+        query['name'] = 'test_board'
+        requests.post(self.base_uri + '1/boards', params=query)
+
+    def delete_trello_board(self, board_id):
+        requests.delete(self.base_uri + f'1/boards/{board_id}')
