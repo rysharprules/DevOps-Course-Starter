@@ -9,8 +9,9 @@ view_model = None
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('settings.py')
-    util = Util(app.config.get("BASE_URI"), app.config.get(
+    app.config['util'] = Util(app.config.get("BASE_URI"), app.config.get(
         "QUERY"), app.config.get("BOARD_ID"))
+    util = app.config['util']
 
     @app.route('/')
     def index():

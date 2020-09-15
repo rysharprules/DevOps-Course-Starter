@@ -1,4 +1,4 @@
-<div id="{{ item.id }}"
+<div id="{{ item.id }}" name="item-box"
     class="item text-dark 
     {% if item.isOverdue() %} 
         bg-due
@@ -23,7 +23,7 @@
                     {{ item.getFormattedDueDate() }}
                 </div>
                 <div class="item-complete">
-                    <a href="/complete/{{ item.id }}">
+                    <a href="/complete/{{ item.id }}" name="item-complete-link">
                         <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" title="Complete item" /> Complete
                     </a>
                 </div>

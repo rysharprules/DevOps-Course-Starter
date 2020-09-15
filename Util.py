@@ -52,7 +52,7 @@ class Util:
 
     def createItem(self, title, description="", due=""):
         query = self._query.copy()
-        query['idList'] = self._getStatusIdForTitle('To Do')
+        query['idList'] = self.getStatusIdForTitle('To Do')
         query['name'] = title
         query['desc'] = description
         query['due'] = due

@@ -28,7 +28,7 @@
           <tbody>
               <tr>
                 {% for status in view_model.getBoardStatuses() %}
-                  <td class="status-col" id="{{ status.id }}">
+                  <td class="status-col" id="{{ status.id }}" name="status-col-{{ status.title }}">
                     {% if status.title == 'To Do' %}
                       {% for item in view_model.getToDoItems() %}
                         {% include 'item.html' %}
@@ -81,7 +81,7 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-dark" type="submit">Submit</button>
+          <button class="btn btn-dark" type="submit" name="submit-item">Submit</button>
         </fieldset>
       </div>
     </form>
