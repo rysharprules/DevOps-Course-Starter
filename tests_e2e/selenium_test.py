@@ -1,24 +1,29 @@
 from threading import Thread
 from selenium import webdriver
-import os
+from Util import Util
 import pytest
+import dotenv
 import app
+from flask import current_app
 
 @pytest.fixture(scope='module')
 def test_app():
-    # construct the new application
+    dotenv.load_dotenv(dotenv.find_dotenv('.env'), override=True)
     application = app.create_app()
-    # Create the new board & update the board id environment variable
-    board_id = app.util.create_trello_board()
-    os.environ['BOARD_ID'] = board_id
+    util = None
+    with application.app_context():
+        util = Util(current_app.config.get("BASE_URI"),
+                    current_app.config.get("QUERY"), '')
+    board_id = util.create_trello_board('test_board')
+    util.board_id = board_id
     # start the app in its own thread.
     thread = Thread(target=lambda: application.run(use_reloader=False))
     thread.daemon = True
     thread.start()
     yield app
-    # Tear Down
+    # tear Down
     thread.join(1)
-    app.util.delete_trello_board(board_id)
+    util.delete_trello_board(board_id)
 
 
 @pytest.fixture(scope="module")
