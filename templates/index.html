@@ -10,60 +10,48 @@
 <div class="row">
   <div class="col-md-12">
     <h2>Items</h2>
-      <div class="form-group">
-        <table class="table">
-          <thead class="thead-dark">
-            <th>Item</th>
-            <th>Status</th>
-            <th>Due</th>
-            <th>Complete</th>
-            <th>Remove</th>
-          </thead>
-          {% for item in items %}
-            <tbody>
-              <form action="/update" method="POST">
-                <tr {% if item.status == 'Done' %} class="table-success" {% else %} class="table-secondary" {% endif %}>
-                  <td>
-                    <strong>{{ item.title }}</strong>
-                    {% if item.description %}
-                      <br />{{ item.description }}
-                    {% endif %}
-                  </td>
-                  <td>
-                    <input id="id" name="id" type="hidden" value="{{ item.id }}">
-                    <select name="status" id="status" onchange="this.form.submit()">
-                      {% for status in statuses %}
-                        <option value="{{ status.id }}" {% if item.status == status.title %} selected {% endif %}>
-                          {{ status.title }}
-                        </option>
+      <table class="table table-borderless" id="todo-table">
+        <thead class="thead-dark">
+          <th>To Do</th>
+          <th>Doing</th>
+          <th>
+            Done
+            <div class="toggle-done">
+              {% if view_model.show_all_done_items %}
+                <a href="/toggle-done/false"><span class="fas fa-eye-slash"></span> Hide old done items</a>
+              {% else %}
+                <a href="/toggle-done/true"><span class="fas fa-eye"></span> Show all done items</a>
+              {% endif %}
+            </div>
+          </th>
+        </thead>
+          <tbody>
+              <tr>
+                {% for status in view_model.getBoardStatuses() %}
+                  <td class="status-col" id="{{ status.id }}" name="status-col-{{ status.title }}">
+                    {% if status.title == 'To Do' %}
+                      {% for item in view_model.getToDoItems() %}
+                        {% include 'item.html' %}
                       {% endfor %}
-                    </select>
-                  </td>
-                  <td {% if item.isOverdue() %} class="bg-warning" {% endif %}>
-                    {% if item.status != 'Done' %}
-                      {{ item.getFormattedDueDate() }}
+                    {% endif %}
+                    {% if status.title == 'Doing' %}
+                      {% for item in view_model.getDoingItems() %}
+                        {% include 'item.html' %}
+                      {% endfor %}
+                    {% endif %}
+                    {% if status.title == 'Done' %}
+                      {% for item in view_model.getDoneItems() %}
+                        {% include 'item.html' %}
+                      {% endfor %}
                     {% endif %}
                   </td>
-                  <td>
-                    {% if item.status != 'Done' %}
-                      <a href="/complete/{{ item.id }}">
-                        <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" />
-                      </a>
-                    {% endif %}
-                  </td>
-                  <td>
-                    <a href="/remove/{{ item.id }}">
-                      <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" />
-                    </a>
-                  </td>
-                </tr>
-              </form>
-            </tbody>
-          {% endfor %}
-        </table><br />
-      </div>
+                {% endfor %}
+              </tr>
+          </tbody>
+      </table>
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-12">
     <h2>Create an item</h2>
@@ -93,18 +81,35 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-dark" type="submit">Submit</button>
+          <button class="btn btn-dark" type="submit" name="submit-item">Submit</button>
         </fieldset>
       </div>
     </form>
   </div>
 </div>
+
 <script>
   $("#due").datepicker({
     startDate: '-0d',
     changeMonth: true,
     format: "mm/dd/yyyy",
     weekStart: 1
+  });
+  $(function() {
+    $(".status-col").sortable({
+      connectWith: ".status-col",
+      handle: ".item-content",
+      receive: function(event, ui) {
+        const form = document.getElementById("update-item-" + ui.item[0].id);
+        $("<input />").attr("type", "hidden")
+          .attr("id", "temp")
+          .attr("name", "status")
+          .attr("value", this.id)
+          .appendTo(form);
+        form.submit();
+        $("#temp").remove();
+      }
+    });
   });
 </script>
 {% endblock %}

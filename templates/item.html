@@ -1,0 +1,38 @@
+<div id="{{ item.id }}" name="item-box"
+    class="item text-dark 
+    {% if item.isOverdue() %} 
+        bg-due
+    {% elif item.status == 'Done' %} 
+        bg-complete
+    {% else %}
+        bg-item
+    {% endif %}" >
+    <form action="/update" method="POST" id="update-item-{{ item.id }}">
+        <input id="id" name="id" type="hidden" value="{{ item.id }}">
+        <div class="item-content">
+            <div class="item-header">{{ item.title }}</div>
+            {% if item.description %}
+                <div>
+                    <span class="fas fa-comment-alt"></span>
+                    {{ item.description }}
+                </div>
+            {% endif %}
+            {% if item.status != 'Done' %}
+                <div>
+                    <span class="fas fa-calendar-alt"></span>
+                    {{ item.getFormattedDueDate() }}
+                </div>
+                <div class="item-complete">
+                    <a href="/complete/{{ item.id }}" name="item-complete-link">
+                        <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" title="Complete item" /> Complete
+                    </a>
+                </div>
+            {% endif %}
+            <div class="item-remove">
+                <a href="/remove/{{ item.id }}">
+                    <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" title="Remove item" /> Remove
+                </a>
+            </div>
+        </div>
+    </form>
+</div>

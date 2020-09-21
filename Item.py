@@ -20,9 +20,10 @@ class Item:
         except (ValueError, TypeError) as e:
             return False, "No Due Date"
 
-    def __init__(self, id, title, status, description, due):
+    def __init__(self, id, title, status, description, due, done):
         self.id = id
         self.title = title
         self.status = status
         self.description = description
         self.due = due
+        self.done = done

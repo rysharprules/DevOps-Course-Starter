@@ -1,0 +1,81 @@
+table {
+    border: 1px solid #e9ecef !important;
+    table-layout: fixed;
+}
+
+table td {
+    border-left: 1px solid #e9ecef !important;
+    border-right: 1px solid #e9ecef !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.item {
+    border: 2px solid #222;
+    text-align: center;
+    min-width: 10vw;
+    max-width: 12vw;
+    min-height: 9vw;
+    margin: auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    overflow: auto;
+}
+
+.item-content:hover {
+    cursor: move;
+}
+
+.item-content > div {
+    display: block;
+    padding: 3%;
+    text-align: left;
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+.item-header {
+    font-weight: bold !important;
+}
+
+.item-complete {
+    float: left;
+}
+
+.item-remove {
+    float: right;
+}
+
+.toggle-done {
+    float: right
+}
+
+.toggle-done > a {
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+.bg-complete {
+    background-color: #93c47d;
+}
+
+.bg-due {
+    background-color: #ffd966;
+}
+
+.bg-item {
+    background-color: #a4c2f4;
+}
+
+.status-col {
+    min-width: 12vw;
+}
+
+/* using font-awesome as glyphicons not in BS4 */
+.cal-icon {
+    padding-right: calc(1.5em + .75rem);
+    background-image: url('https://use.fontawesome.com/releases/v5.14.0/svgs/regular/calendar-alt.svg');
+    background-repeat: no-repeat;
+    background-position: center right calc(.375em + .1875rem);
+    background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
