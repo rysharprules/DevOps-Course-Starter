@@ -124,6 +124,7 @@ def test_getDoneItems_today(done_items):
     # then
     assert len(today_done_items) == 1
     assert today_done_items[0].done == done_items[2].done
+    assert today_done_items[0].id == done_items[2].id
 
 
 def test_getDoneItems_showAllDoneItems(done_items):

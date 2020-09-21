@@ -4,7 +4,7 @@ import requests
 import sys
 
 
-class Util:
+class ApiHelper:
 
     def __init__(self, base_uri, query, board_id):
         self._base_uri = base_uri

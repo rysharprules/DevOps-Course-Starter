@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from ViewModel import ViewModel
-from Util import Util
+from ApiHelper import ApiHelper
 import sys
 import os
 
@@ -9,14 +9,14 @@ view_model = None
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('settings.py')
-    app.config['util'] = Util(app.config.get("BASE_URI"), app.config.get(
+    app.config['api'] = ApiHelper(app.config.get("BASE_URI"), app.config.get(
         "QUERY"), app.config.get("BOARD_ID"))
-    util = app.config['util']
+    api = app.config['api']
 
     @app.route('/')
     def index():
         global view_model
-        view_model = ViewModel(*util.getItemData())
+        view_model = ViewModel(*api.getItemData())
         return render_template(
             'index.html',
             view_model=view_model
@@ -24,23 +24,23 @@ def create_app():
 
     @app.route('/create', methods=['POST'])
     def create():
-        util.createItem(request.form['title'],
+        api.createItem(request.form['title'],
                        request.form['desc'], request.form['due'])
         return index()
 
     @app.route('/update', methods=['POST'])
     def update():
-        util.updateItem(request.form['id'], request.form['status'])
+        api.updateItem(request.form['id'], request.form['status'])
         return index()
 
     @app.route('/complete/<id>')
     def complete_item(id):
-        util.updateItem(id, util.getStatusIdForTitle('Done'))
+        api.updateItem(id, api.getStatusIdForTitle('Done'))
         return index()
 
     @app.route('/remove/<id>')
     def remove(id):
-        util.removeItem(id)
+        api.removeItem(id)
         return index()
 
     @app.route('/toggle-done/<toggle>')
