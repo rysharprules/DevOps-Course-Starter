@@ -111,10 +111,11 @@ dmypy.json
 
 ### Virtual environment ###
 env/
+.venv/
+.vagrant
 
 ### Configuration files ###
 .env
 
 .vscode/
 geckodriver.log
-.vagrant
