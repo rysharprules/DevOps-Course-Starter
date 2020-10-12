@@ -125,7 +125,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 Try the new cross-platform PowerShell https://aka.ms/pscore6
 
 Hello and welcome to...
-  _____                   _    	   _____ 		               _____ _          _ _ 
+  _____                   _    	   _____ 		       _____ _          _ _ 
  |  __ \                 ( )      |  __ \                     / ____| |        | | |
  | |__) |   _  __ _ _ __ |/ ___   | |__) |____      _____ _ __ (___ | |__   ___| | |
  |  _  / | | |/ _` | '_ \  / __|  |  ___/ _ \ \ /\ / / _ \ '__\___ \| '_ \ / _ \ | |
