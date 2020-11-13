@@ -81,13 +81,17 @@ This application relies on the existence of Lists on the Trello board named "`To
 
 This application can also be run within a virtual machine (VM) by using [Vagrant](https://www.vagrantup.com/downloads.html).
 
-Vagrant requires a hypervisor installed. This application is configured to use Windows [Hyper-V](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/about/). 
+Vagrant requires a hypervisor installed. This application is configured to use any provider. The following set up details running the Vagrant with Windows [Hyper-V](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/about/). 
 
 #### Setting up Hyper-V
 
 1. Install Hyper-V
 2. Add an external switch in Hyper-V Manager as per "Tip 1" in these [instructions](https://techcommunity.microsoft.com/t5/virtualization/vagrant-and-hyper-v-tips-and-tricks/ba-p/382373).
-3. Virtualization needs to be turned on in the firmware. This must be done via the BIOS. This varies by machine but generally the steps are:
+3. Virtualization may need to be turned on in the firmware. To check perform one of the following:
+   - Via Control Panel -> Performance -> CPU -> Virtualisation: enabled
+   - In Command Prompt run `systeminfo`, note the Hyper-V Requirements . You will see a "No" for `Virtualization Enabled In Firmware` if it is off
+   - In PowerShell run `Get-ComputerInfo -property "HyperV*"`, note the `HyperVisorPresent` boolean value
+4. If virtualization needs turning on, this must be done via the BIOS. This varies by machine but generally the steps are:
    1. Restart the system
    2. Press F2 (or alternate shown on screen) to enter BIOS
    3. Navigate to Advanced
@@ -119,24 +123,7 @@ Add the IP of the VM to your browser with the port of `5000` to see the TODO app
 ##### Example output
 
 ````
-Windows PowerShell
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-Try the new cross-platform PowerShell https://aka.ms/pscore6
-
-Hello and welcome to...
-  _____                   _    	   _____ 		       _____ _          _ _ 
- |  __ \                 ( )      |  __ \                     / ____| |        | | |
- | |__) |   _  __ _ _ __ |/ ___   | |__) |____      _____ _ __ (___ | |__   ___| | |
- |  _  / | | |/ _` | '_ \  / __|  |  ___/ _ \ \ /\ / / _ \ '__\___ \| '_ \ / _ \ | |
- | | \ \ |_| | (_| | | | | \__ \  | |  | (_) \ V  V /  __/ |  ____) | | | |  __/ | |
- |_|  \_\__, |\__,_|_| |_| |___/  |_|   \___/ \_/\_/ \___|_| |_____/|_| |_|\___|_|_|
-         __/ |                                                                     
-        |___/                                                                      
-Running in admin mode.
-Loading personal and system profiles took 1300ms.
-→ C:\WINDOWS\system32› proj devops
-→ C:\projects\DevOps-Course-Starter [exercise-4 ≡ +4 ~3 -2 !]› vagrant up
+→ vagrant up
 Bringing machine 'default' up with 'hyperv' provider...
 ==> default: Verifying Hyper-V is enabled...
 ==> default: Verifying Hyper-V is accessible...
