@@ -1,5 +1,5 @@
-from Item import Item
-from Status import Status
+from todo_app.Item import Item
+from todo_app.Status import Status
 import requests
 import sys
 

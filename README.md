@@ -2,28 +2,6 @@
 
 ## Getting started
 
-The project uses a virtual environment to isolate package dependencies. To create the virtual environment and install required packages, run the following from a bash shell terminal:
-
-### On macOS and Linux
-
-```bash
-$ source setup.sh
-```
-
-### On Windows
-
-Git Bash:
-
-```bash
-$ source setup.sh --windows
-```
-
-PowerShell
-
-```bash
-$ ./setup --windows
-```
-
 ### Environment variables
 
 To run effectively, update the `.env` file with your application details:
@@ -60,7 +38,7 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 To run unit tests use the command:
 
 ```bash
-$ pytest .\tests\
+$ pytest todo_app\tests\
 ```
 
 #### Integration testing
@@ -70,7 +48,7 @@ You will need Firefox version 60+ to run these tests. [Download here](https://ww
 To run integration tests use the command:
 
 ```bash
-$ pytest .\tests_e2e\
+$ pytest todo_app\tests_e2e\
 ```
 
 #### Statuses

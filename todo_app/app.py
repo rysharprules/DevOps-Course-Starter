@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
-from ViewModel import ViewModel
-from ApiHelper import ApiHelper
+from todo_app.ViewModel import ViewModel
+from todo_app.ApiHelper import ApiHelper
 import sys
 import os
 
