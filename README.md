@@ -163,3 +163,23 @@ may request access to complete setup of configured shares.
     default:  * Debugger is active!
     default:  * Debugger PIN: 110-403-136
 ````
+
+### Containers
+
+The application can run with Docker.
+
+#### Development
+
+1. Create a docker image with name and tag targetted for `dev`: 
+   1. `docker build --target dev -t todo-app:dev .`
+2. Start the container with `docker-compose` 
+   1. `docker-compose up -d`
+3. The application will now be available in [localhost with port 5000](http://localhost:5000)
+
+#### Production
+
+1. Create a docker image with name and tag targetted for `prod`: 
+   1. `docker build --target prod -t todo-app:prod .`
+2. Run the container with specified `.env` file and assigned the port: 
+   1. `docker run --env-file .env -p 8000:8000 todo-app:prod`
+3. The application will now be available in [localhost with port 8000](http://localhost:8000)
