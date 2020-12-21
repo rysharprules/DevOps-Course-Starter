@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#C:/projects/DevOps-Course-Starter/todo_app/ApiHelper.py</OriginalElement>
+  <nodes>
+    <node x="0.0" y="408.0">todo_app.Item.Item</node>
+    <node x="347.0" y="408.0">todo_app.Status.Status</node>
+    <node x="0.0" y="0.0">todo_app.ApiHelper.ApiHelper</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="277.5" y="330.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+
