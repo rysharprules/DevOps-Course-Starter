@@ -4,7 +4,7 @@
 
 ### Environment variables
 
-To run effectively, update the `.env` file with your application details:
+To run effectively, copy the `.env.template` file and rename to `.env`. Update the `.env` file with your application details:
 
 1. `API_KEY` - Used to call the [Trello](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) API
 1. `API_TOKEN` - Used to call the [Trello](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) API
