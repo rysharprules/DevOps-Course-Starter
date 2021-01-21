@@ -2,31 +2,9 @@
 
 ## Getting started
 
-The project uses a virtual environment to isolate package dependencies. To create the virtual environment and install required packages, run the following from a bash shell terminal:
-
-### On macOS and Linux
-
-```bash
-$ source setup.sh
-```
-
-### On Windows
-
-Git Bash:
-
-```bash
-$ source setup.sh --windows
-```
-
-PowerShell
-
-```bash
-$ ./setup --windows
-```
-
 ### Environment variables
 
-To run effectively, update the `.env` file with your application details:
+To run effectively, copy the `.env.template` file and rename to `.env`. Update the `.env` file with your application details:
 
 1. `API_KEY` - Used to call the [Trello](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) API
 1. `API_TOKEN` - Used to call the [Trello](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) API
@@ -60,7 +38,7 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 To run unit tests use the command:
 
 ```bash
-$ pytest .\tests\
+$ pytest todo_app\tests\
 ```
 
 #### Integration testing
@@ -70,7 +48,7 @@ You will need Firefox version 60+ to run these tests. [Download here](https://ww
 To run integration tests use the command:
 
 ```bash
-$ pytest .\tests_e2e\
+$ pytest todo_app\tests_e2e\
 ```
 
 #### Statuses
@@ -185,3 +163,23 @@ may request access to complete setup of configured shares.
     default:  * Debugger is active!
     default:  * Debugger PIN: 110-403-136
 ````
+
+### Containers
+
+The application can run with Docker.
+
+#### Development
+
+1. Create a docker image with name and tag targetted for `dev`: 
+   1. `docker build --target dev -t todo-app:dev .`
+2. Start the container with `docker-compose` 
+   1. `docker-compose up -d`
+3. The application will now be available in [localhost with port 5000](http://localhost:5000)
+
+#### Production
+
+1. Create a docker image with name and tag targetted for `prod`: 
+   1. `docker build --target prod -t todo-app:prod .`
+2. Run the container with specified `.env` file and assigned the port: 
+   1. `docker run --env-file .env -p 8000:8000 todo-app:prod`
+3. The application will now be available in [localhost with port 8000](http://localhost:8000)

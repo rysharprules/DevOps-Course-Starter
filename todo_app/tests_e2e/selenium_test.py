@@ -1,7 +1,7 @@
 from threading import Thread
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
-from ApiHelper import ApiHelper
+from todo_app.ApiHelper import ApiHelper
 import pytest
 import dotenv
 import app
