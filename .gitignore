@@ -117,5 +117,9 @@ env/
 ### Configuration files ###
 .env
 
+## IDE
 .vscode/
+.idea/
+
+# Testing output
 geckodriver.log
