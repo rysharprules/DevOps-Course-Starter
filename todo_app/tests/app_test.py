@@ -1,14 +1,14 @@
 import pytest
 import dotenv
-import app
+import todo_app.app
 import requests
 import json
 
 @pytest.fixture
 def client():
-    file_path = dotenv.find_dotenv('.env.test')
+    file_path = dotenv.find_dotenv('../.env.test')
     dotenv.load_dotenv(file_path, override=True)
-    test_app = app.create_app()
+    test_app = todo_app.app.create_app()
     with test_app.test_client() as client:
         yield client
 
@@ -16,14 +16,14 @@ class MockStatusResponse:
 
     @staticmethod
     def json():
-        with open('tests/mock/statuses.json', 'r') as json_file:
+        with open('todo_app/tests/mock/statuses.json', 'r') as json_file:
             return json.load(json_file)
 
 class MockItemResponse:
 
     @staticmethod
     def json():
-        with open('tests/mock/items.json', 'r') as json_file:
+        with open('todo_app/tests/mock/items.json', 'r') as json_file:
             return json.load(json_file)
 
 def mock_get(*args, **kwargs):
