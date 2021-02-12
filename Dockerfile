@@ -32,4 +32,4 @@ RUN VERSION=$(curl -sL https://api.github.com/repos/mozilla/geckodriver/releases
     grep tag_name | cut -d '"' -f 4) \
     && curl -sL "https://github.com/mozilla/geckodriver/releases/download/$VERSION/geckodriver-$VERSION-linux64.tar.gz" | \
     tar -xz -C /app
-CMD ["poetry", "run", "pytest", "todo_app/tests/", "todo_app/tests_e2e/"]
+CMD ["poetry", "run", "pytest"]
