@@ -1,5 +1,5 @@
 script:
-  - docker build --target test -t todo-app:test .
-  - docker run todo-app:test todo_app/tests/
+  - docker build --target test -t todo-app .
+  - docker run todo-app todo_app/tests/
 notifications:
   email: false
