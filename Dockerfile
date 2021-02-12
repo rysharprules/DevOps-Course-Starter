@@ -21,4 +21,4 @@ CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0", "todo_app.app:create_app()"]
 FROM base as test
 COPY . /app
 WORKDIR /app
-CMD ["poetry", "run", "pytest", "todo_app/tests/"]
+CMD ["poetry", "run", "pytest", "todo_app/tests/", "todo_app/tests_e2e/"]

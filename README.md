@@ -171,18 +171,25 @@ The application can run with Docker.
 #### Development
 
 1. Create a docker image with name and tag targetted for `dev`: 
-   1. `docker build --target dev -t todo-app:dev .`
+   - `docker build --target dev -t todo-app:dev .`
 2. Start the container with `docker-compose` 
-   1. `docker-compose up -d`
+   - `docker-compose up -d`
 3. The application will now be available in [localhost with port 5000](http://localhost:5000)
 
 #### Production
 
 1. Create a docker image with name and tag targetted for `prod`: 
-   1. `docker build --target prod -t todo-app:prod .`
+   - `docker build --target prod -t todo-app:prod .`
 2. Run the container with specified `.env` file and assigned the port: 
-   1. `docker run --env-file .env -p 8000:8000 todo-app:prod`
+   - `docker run --env-file .env -p 8000:8000 todo-app:prod`
 3. The application will now be available in [localhost with port 8000](http://localhost:8000)
+
+#### Test
+
+1. Create a docker image with name and tag targetted for `test`: 
+   - `docker build --target test -t todo-app:test .`
+2. Run the container
+   - `docker run todo-app:test`
 
 ## Architecture
 

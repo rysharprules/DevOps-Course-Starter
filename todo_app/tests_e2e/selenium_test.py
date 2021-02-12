@@ -4,13 +4,13 @@ from selenium.webdriver.common.action_chains import ActionChains
 from todo_app.ApiHelper import ApiHelper
 import pytest
 import dotenv
-import app
+import todo_app.app
 from flask import current_app
 
 @pytest.fixture(scope='module')
 def test_app():
     dotenv.load_dotenv(dotenv.find_dotenv('.env'), override=True)
-    application = app.create_app()
+    application = todo_app.app.create_app()
     api = None
     with application.app_context():
         api = current_app.config.get('api')
@@ -20,7 +20,7 @@ def test_app():
     thread = Thread(target=lambda: application.run(use_reloader=False))
     thread.daemon = True
     thread.start()
-    yield app
+    yield todo_app.app
 
     # tear down
     thread.join(1)
