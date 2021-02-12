@@ -1,2 +1,2 @@
 script:
-  - docker build --target test --t todo-app:test .
+  - docker build --target test -t todo-app:test .
