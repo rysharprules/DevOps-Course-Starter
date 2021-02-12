@@ -16,14 +16,14 @@ class MockStatusResponse:
 
     @staticmethod
     def json():
-        with open('todo_app/tests/mock/statuses.json', 'r') as json_file:
+        with open('./todo_app/tests/mock/statuses.json', 'r') as json_file:
             return json.load(json_file)
 
 class MockItemResponse:
 
     @staticmethod
     def json():
-        with open('todo_app/tests/mock/items.json', 'r') as json_file:
+        with open('./todo_app/tests/mock/items.json', 'r') as json_file:
             return json.load(json_file)
 
 def mock_get(*args, **kwargs):

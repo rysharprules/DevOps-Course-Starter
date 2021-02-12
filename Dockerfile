@@ -19,6 +19,6 @@ EXPOSE 8000
 CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0", "todo_app.app:create_app()"]
 
 FROM base as test
-COPY .env.test /app
+COPY . /app
 WORKDIR /app
-CMD ["poetry", "run", "pytest", "app/tests/"]
+CMD ["poetry", "run", "pytest", "todo_app/tests/"]
