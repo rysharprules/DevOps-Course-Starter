@@ -43,13 +43,23 @@ $ pytest todo_app\tests\
 
 #### Integration testing
 
-You will need Firefox version 60+ to run these tests. [Download here](https://www.mozilla.org/en-GB/firefox/new/).
+You will need Firefox version 60+ to run visual web tests. [Download here](https://www.mozilla.org/en-GB/firefox/new/). 
 
-To run integration tests use the command:
+To run Firefox tests use the command:
 
 ```bash
-$ pytest todo_app\tests_e2e\
+$ pytest todo_app\tests_e2e\firefox_test.py
 ```
+
+Tests are also available in Chrome. You will need Chrome version 88. [Download here](https://chromedriver.storage.googleapis.com/index.html?path=88.0.4324.96/).
+
+To run Chrome tests use the command:
+
+```bash
+$ pytest todo_app\tests_e2e\chrome_test.py
+```
+
+The Chrome tests run in headless mode and are used when building with Docker.
 
 #### Statuses
 
@@ -189,7 +199,7 @@ The application can run with Docker.
 1. Create a docker image with name and tag targetted for `test`: 
    - `docker build --target test -t todo-app:test .`
 2. Run the container
-   - `docker run todo-app:test`
+   - `docker run --env-file .env todo-app:test`
 
 ## Architecture
 

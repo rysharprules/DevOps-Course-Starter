@@ -18,18 +18,15 @@ WORKDIR /app
 EXPOSE 8000
 CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0", "todo_app.app:create_app()"]
 
-FROM base as test
+FROM base AS test
 COPY . /app
 WORKDIR /app
-RUN apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -y \
-    libgtk-3-0 \
-    libdbus-glib-1-2 \
-    bzip2 \
-    && curl -sL 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64' | tar -xj -C /opt \
-    && ln -s /opt/firefox/firefox /usr/local/bin/
-RUN VERSION=$(curl -sL https://api.github.com/repos/mozilla/geckodriver/releases/latest | \
-    grep tag_name | cut -d '"' -f 4) \
-    && curl -sL "https://github.com/mozilla/geckodriver/releases/download/$VERSION/geckodriver-$VERSION-linux64.tar.gz" | \
-    tar -xz -C /app
-CMD ["poetry", "run", "pytest"]
+RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o chrome.deb && \
+    apt-get update && \
+    apt-get -f install ./chrome.deb -y && \
+    rm ./chrome.deb
+RUN LATEST=`curl -sSL https://chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
+    curl -sSL https://chromedriver.storage.googleapis.com/${LATEST}/chromedriver_linux64.zip -o chromedriver_linux64.zip && \
+    apt-get install unzip -y && \
+    unzip ./chromedriver_linux64.zip
+CMD ["poetry", "run", "pytest", "todo_app/tests/", "todo_app/tests_e2e/chrome_test.py"]
