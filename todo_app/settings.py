@@ -1,8 +1,8 @@
-from os import environ
+import os
 
-API_KEY = environ.get("API_KEY", None)
-API_TOKEN = environ.get("API_TOKEN", None)
-BOARD_ID = environ.get("BOARD_ID", None)
+API_KEY = os.getenv("API_KEY")
+API_TOKEN = os.getenv("API_TOKEN")
+BOARD_ID = os.getenv("BOARD_ID")
 
 BASE_URI = "https://api.trello.com/"
 QUERY = {

@@ -1,5 +1,5 @@
 script:
   - docker build --target test -t todo-app .
-  - docker run --env API_KEY --env API_TOKEN --env API_SECRET --env BOARD_ID --env FLASK_APP --env FLASK_ENV todo-app
+  - docker run -e API_KEY -e API_TOKEN -e API_SECRET -e BOARD_ID -e FLASK_APP -e FLASK_ENV todo-app
 notifications:
   email: false

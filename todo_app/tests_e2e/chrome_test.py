@@ -6,10 +6,12 @@ import pytest
 import dotenv
 import todo_app.app
 from flask import current_app
+from pathlib import Path
 
 @pytest.fixture(scope='module')
 def test_app():
-    dotenv.load_dotenv(dotenv.find_dotenv('.env'), override=True)
+    if Path('.env').exists() is True:
+        dotenv.load_dotenv(dotenv.find_dotenv('.env'), override=True)
     application = todo_app.app.create_app()
     api = None
     with application.app_context():
