@@ -7,7 +7,6 @@ env:
   - secure: VZTZVp+P8tdWdESo80PJmRPyZCMUS5QtyH8yUojEcTEbhWn+iGYyMBssoUmVYVX7dZZ2c7ctAjZ/1lta0nhB8VL+Tf9SnOy4ULK22ryfbTk6jmwaaRN4sFRG1C+fruQIjsKxkZXTlFra0wxHdDOT55Ak0sK4uUjrdbQfsFsRMcyuKQyXbkFYmQIj+ZpjCrfRGOJvZyPU+ALwEwMNsJwSHdbcfbWimGw7F2ubAeMcV9d00PI5S15DHUrdQ6Or14sYKZx9nv0hdyky3Zl/ZmQ/AFAiPwqFI0x7bfE8i4lvS8T/KKR4jKB6FDI+vehd/TJZOTzfMcjNqd9G0v3PsqSO81NllquKEb/BwLL5A/QiZNTzbKh2s+TyB/QWOdKW+BA4QdvQAgsbXtECq351/FfMG9yKiP737904K7veq2skWDcL4Tj1nk7mRQQxT2YHsiVM+oRg3gExsc6oeAbBEBHHleoMusX4oUqJ0fdKQIUwWde6U2fEuG9SdPaGE6bpmJdz2NEf/VCU8SqWlV9HA9zQpazCHkmQxsvL8qF/QgV0zjcjft/AbGExv4u+2Eu3YwF4nIS9fSBJxtmCCuU2XrNagUY+HMpDo/hBO7CpxI3IhA7PAMjuchc8H4DFCM9o3a0eI1Wca+bB3Eysg+cMlfZyHeqD/QEG8VgLF9lo1pb5PWI=
 script:
 - docker build --target test -t todo-app .
-- docker run -e API_KEY=${API_KEY} -e API_TOKEN=${API_TOKEN} -e BOARD_ID=${BOARD_ID} -e
-  FLASK_APP=todo_app.app -e FLASK_ENV=production todo-app
+- docker run -e FLASK_APP=todo_app.app -e FLASK_ENV=production todo-app
 notifications:
   email: false
