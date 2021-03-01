@@ -16,8 +16,8 @@ FROM base AS prod
 ENV FLASK_ENV=production
 COPY . /app
 WORKDIR /app
-EXPOSE 8000
-CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0", "todo_app.app:create_app()"]
+ENV PORT=5000
+ENTRYPOINT ["sh", "./entrypoint.sh"]
 
 FROM base AS test
 COPY . /app
