@@ -198,8 +198,10 @@ The application can run with Docker.
 
 1. Create a docker image with name and tag targetted for `test`: 
    - `docker build --target test -t todo-app:test .`
-2. Run the container
-   - `docker run --env-file .env todo-app:test`
+2. Run the container with the unit, integration and/or the headless browser tests
+   - `docker run --env-file .env todo-app:test todo_app/tests` - unit and integration
+   - `docker run --env-file .env todo-app:test todo_app/tests_e2e/chrome_test.py` - web unit tests
+   - `docker run --env-file .env todo-app:test todo_app/tests todo_app/tests_e2e/chrome_test.py` - all tests
 
 ## Architecture
 
