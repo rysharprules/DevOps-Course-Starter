@@ -8,6 +8,6 @@ env:
 script:
 - docker build --target test -t todo-app .
 - docker run todo-app todo_app/tests/
-- docker run -e API_KEY -e API_TOKEN -e BOARD_ID -e FLASK_ENV=production -e FLASK_APP=todo_app.app todo_app/tests_e2e/chrome_test.py
+- docker run -e API_KEY -e API_TOKEN -e BOARD_ID -e FLASK_ENV=production -e FLASK_APP=todo_app.app todo-app todo_app/tests_e2e/chrome_test.py
 notifications:
   email: false
