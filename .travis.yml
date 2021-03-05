@@ -6,10 +6,12 @@ env:
   - secure: n1b/91k8W2PjbtOzufoZjFZ9mlH9qZa3zS+dMV3m1/m1fHvVzQULpm3W/4Yo0ME4IR+y4mckBQHn/Rh/2mRNPVxcqIQO7D3AaY6gA45GufkxNtjqd8hQlJowuccsgJz3k3a9vNi/1TU6I94RztnaYMtl1qfKSy+iyxPfgOH+fYBd6v6bIxfiFNIomgJsiBJqnHbW24efCH3pvf7qkX/hvzxywt/gD05KwqDJoYyCuZTanrrt6LX6O7h4SWDz8lPo2pU+fkQEAsXahZb+rvz8Kmh4WL6Gn+eQuWGWFhi2TbRPuvEkSebCfse1G+nzxbbr58+cy63T3jLmlCuSR8MV14O1BPv/RyXM1vpM7kZq/9sPGDwKSB49/Ct3rZZFFQignN9PdmH9zYi0RZpFhOkiUKeABVV/QH3kjItASVx7ORvwlzUkX3kz0JUMRFntBq3sEIt18v0qGE732tvdsOBOhEq8URO1jyXYF/x+ABuTFeeMS3ISjW6KOmdPcJk45Wtv2NdCz5DFm1gqpw9IRCuxLocyI+Jul65zYwivOtYYgz3vC04VzuvMnIx6dIPoQBkm6+3R4azmakwqYBTfvI6C4w1E4AWkBi99n0pFzRaWC3STieNt3UI/u2cWVQ05nuWLC4CcTnFEuHEFBffiABnnQX718i9nNd40HNvcw7QIugE=
   - secure: VZTZVp+P8tdWdESo80PJmRPyZCMUS5QtyH8yUojEcTEbhWn+iGYyMBssoUmVYVX7dZZ2c7ctAjZ/1lta0nhB8VL+Tf9SnOy4ULK22ryfbTk6jmwaaRN4sFRG1C+fruQIjsKxkZXTlFra0wxHdDOT55Ak0sK4uUjrdbQfsFsRMcyuKQyXbkFYmQIj+ZpjCrfRGOJvZyPU+ALwEwMNsJwSHdbcfbWimGw7F2ubAeMcV9d00PI5S15DHUrdQ6Or14sYKZx9nv0hdyky3Zl/ZmQ/AFAiPwqFI0x7bfE8i4lvS8T/KKR4jKB6FDI+vehd/TJZOTzfMcjNqd9G0v3PsqSO81NllquKEb/BwLL5A/QiZNTzbKh2s+TyB/QWOdKW+BA4QdvQAgsbXtECq351/FfMG9yKiP737904K7veq2skWDcL4Tj1nk7mRQQxT2YHsiVM+oRg3gExsc6oeAbBEBHHleoMusX4oUqJ0fdKQIUwWde6U2fEuG9SdPaGE6bpmJdz2NEf/VCU8SqWlV9HA9zQpazCHkmQxsvL8qF/QgV0zjcjft/AbGExv4u+2Eu3YwF4nIS9fSBJxtmCCuU2XrNagUY+HMpDo/hBO7CpxI3IhA7PAMjuchc8H4DFCM9o3a0eI1Wca+bB3Eysg+cMlfZyHeqD/QEG8VgLF9lo1pb5PWI=
   - secure: xTqdvDQdken8un7v9cqDm8h017ODdwq9vQUm+lofd+K6SDEYUvuxkkBjJkiPhI6JNR9mr8weuKyFghoaAVDB3WkWsz9OlzIM2uEShW7oo/bObPIsv3V9J/+bzNuMHrS2e3TIqZlI7P+IVa4HSix6c2Oh+Xq59cvi7OXErTTXDce+ss91bkn8jYh2634BhlYQvzH9fDyqnjjyU7EpwlSI2+67cQYyLPR7srSGsCEg066Zn+0yYtQMvLqWnXa/hW10NsXo7vni/NcesmIQ/iV8MbPRRy+SCECbySDht3cUVNgC7/Zjfny8zu0uHD3wLc4yu/+ZWdOklXC2xwDUlP9yWRFGlqorDAyp6D3QwgxTwiyfiAohpA0cI7euihwijpnnV6lXMg8uy6btRl1BhSrWOWo4yb4FGWE6xt0/lq0kwGHoFWBE8NE2Jjp6lHCp9EE1CxzR2kGjZb5DDqsZ9ewA6Z7/otsIy2LgWFH60DO1BsNBelW4dBi9zT9f0HGyFgFCK+eUIzlA8sDfF3igvehcdZV/8BFIWJ5DJ3gV4+2jsus9OZbaSZJYXslDz6I743WZU/eEcrV0A1PQpm/2d4uCWpYahyjc6DGlHUKObkqgqk84uhPDQt3P8NaAKVnzf64HQxjlXpb5+1wk9Rgb7fyE8012XoqHeKj9sn/sqKDzsRU=
+before_script:
+  - docker login -u rysharp -p $DOCKERHUB_PW
 script:
-- docker build --target test -t todo-app .
-- docker run todo-app todo_app/tests/
-- docker run -e API_KEY -e API_TOKEN -e BOARD_ID -e FLASK_ENV=production -e FLASK_APP=todo_app.app todo-app todo_app/tests_e2e/chrome_test.py
+  - docker build --target test -t todo-app .
+  - docker run todo-app todo_app/tests/
+  - docker run -e API_KEY -e API_TOKEN -e BOARD_ID -e FLASK_ENV=production -e FLASK_APP=todo_app.app todo-app todo_app/tests_e2e/chrome_test.py
 deploy:
   provider: script
   script: bash deploy.sh
