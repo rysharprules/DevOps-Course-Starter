@@ -1,10 +1,11 @@
-FROM python:3.9-buster AS base
+FROM python:3.9.2-slim-buster AS base
 RUN mkdir /app
 COPY *.toml /app/
 WORKDIR /app
 RUN pip3 install poetry \
     && poetry config virtualenvs.create false \
-    && poetry install --no-dev
+    && poetry install --no-dev \
+    && apt-get update && apt-get install -y curl
 
 FROM base AS dev
 WORKDIR /app
@@ -17,3 +18,15 @@ COPY . /app
 WORKDIR /app
 EXPOSE 8000
 CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0", "todo_app.app:create_app()"]
+
+FROM base AS test
+COPY . /app
+WORKDIR /app
+RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o chrome.deb && \
+    apt-get -f install ./chrome.deb -y && \
+    rm ./chrome.deb
+RUN LATEST=`curl -sSL https://chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
+    curl -sSL https://chromedriver.storage.googleapis.com/${LATEST}/chromedriver_linux64.zip -o chromedriver_linux64.zip && \
+    apt-get install unzip -y && \
+    unzip ./chromedriver_linux64.zip
+ENTRYPOINT ["poetry", "run", "pytest"]

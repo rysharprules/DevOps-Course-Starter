@@ -43,13 +43,23 @@ $ pytest todo_app\tests\
 
 #### Integration testing
 
-You will need Firefox version 60+ to run these tests. [Download here](https://www.mozilla.org/en-GB/firefox/new/).
+You will need Firefox version 60+ to run visual web tests. [Download here](https://www.mozilla.org/en-GB/firefox/new/). 
 
-To run integration tests use the command:
+To run Firefox tests use the command:
 
 ```bash
-$ pytest todo_app\tests_e2e\
+$ pytest todo_app\tests_e2e\firefox_test.py
 ```
+
+Tests are also available in Chrome. You will need Chrome version 88. [Download here](https://chromedriver.storage.googleapis.com/index.html?path=88.0.4324.96/).
+
+To run Chrome tests use the command:
+
+```bash
+$ pytest todo_app\tests_e2e\chrome_test.py
+```
+
+The Chrome tests run in headless mode and are used when building with Docker.
 
 #### Statuses
 
@@ -171,18 +181,26 @@ The application can run with Docker.
 #### Development
 
 1. Create a docker image with name and tag targetted for `dev`: 
-   1. `docker build --target dev -t todo-app:dev .`
+   - `docker build --target dev -t todo-app:dev .`
 2. Start the container with `docker-compose` 
-   1. `docker-compose up -d`
+   - `docker-compose up -d`
 3. The application will now be available in [localhost with port 5000](http://localhost:5000)
 
 #### Production
 
 1. Create a docker image with name and tag targetted for `prod`: 
-   1. `docker build --target prod -t todo-app:prod .`
+   - `docker build --target prod -t todo-app:prod .`
 2. Run the container with specified `.env` file and assigned the port: 
-   1. `docker run --env-file .env -p 8000:8000 todo-app:prod`
+   - `docker run --env-file .env -p 8000:8000 todo-app:prod`
 3. The application will now be available in [localhost with port 8000](http://localhost:8000)
+
+#### Test
+
+1. Create a docker image with name and tag targetted for `test`: 
+   - `docker build --target test -t todo-app:test .`
+2. Run the container with the unit, integration or the headless browser tests
+   - `docker run todo-app:test todo_app/tests` - unit and integration
+   - `docker run --env-file .env todo-app:test todo_app/tests_e2e/chrome_test.py` - web unit tests
 
 ## Architecture
 
