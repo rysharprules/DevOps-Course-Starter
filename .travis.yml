@@ -13,7 +13,7 @@ before_script:
 script:
 - docker build --target test -t todo-app .
 - docker run todo-app todo_app/tests/
-- docker run -e API_KEY -e API_TOKEN todo-app todo_app/tests_e2e/
+- docker run -e API_KEY -e API_TOKEN todo-app todo_app/tests_e2e/chrome_test.py
 deploy:
   provider: script
   script: bash deploy.sh
