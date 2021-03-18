@@ -3,7 +3,7 @@ RUN mkdir /app
 COPY *.toml /app/
 WORKDIR /app
 RUN pip3 install poetry \
-    && poetry config virtualenvs.create false \
+    && poetry config virtualenvs.create false --local \
     && poetry install --no-dev \
     && apt-get update && apt-get install -y curl
 
@@ -13,11 +13,11 @@ EXPOSE 5000
 CMD ["poetry", "run", "flask", "run", "-h", "0.0.0.0"]
 
 FROM base AS prod
-ENV FLASK_ENV=production
 COPY . /app
 WORKDIR /app
-EXPOSE 8000
-CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0", "todo_app.app:create_app()"]
+EXPOSE 5000
+ENV PORT=${PORT}
+ENTRYPOINT ["sh", "entrypoint.sh"]
 
 FROM base AS test
 COPY . /app

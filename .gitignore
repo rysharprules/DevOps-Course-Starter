@@ -114,6 +114,11 @@ env/
 .venv/
 .vagrant
 
+# Testing driver
+geckodriver.exe
+geckodriver.log
+chromedriver.exe
+
 ### Configuration files ###
 .env
 
