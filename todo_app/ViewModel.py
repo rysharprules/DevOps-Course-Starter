@@ -33,7 +33,7 @@ class ViewModel:
 
     def getDoingItems(self):
         return self.filterItemsByStatus(self.getStatusWithTitle(ViewModel.board_statuses[1]))
-
+    
     def getDoneItems(self):
         allDoneItems = self.getAllDoneItems()
         if len(allDoneItems) < 5 or self.show_all_done_items:

@@ -12,7 +12,7 @@ items = [Item('1', 'do the thing', 'To Do', '', '', ''),
 statuses = [Status('4', 'To Do'), Status('5', 'Doing'), Status('6', 'Done'), Status('7', 'Another Status')]
 
 @pytest.fixture
-def view_model():
+def viewModel():
     return ViewModel(items, statuses)
 
 @pytest.fixture
@@ -29,9 +29,9 @@ def done_items():
                 Item('15', 'and one last thing', 'Done', '', '', formattedYesterday),]
 
 
-def test_getBoardStatuses(view_model):
+def test_getBoardStatuses(viewModel):
     # when
-    board_statuses = view_model.getBoardStatuses()
+    board_statuses = viewModel.getBoardStatuses()
 
     # then
     assert len(board_statuses) == 3
@@ -40,9 +40,9 @@ def test_getBoardStatuses(view_model):
     assert board_statuses[2].title == statuses[2].title
 
 
-def test_filterItemsByStatus_todos(view_model):
+def test_filterItemsByStatus_todos(viewModel):
     # when
-    filter_todos = view_model.filterItemsByStatus(statuses[0])
+    filter_todos = viewModel.filterItemsByStatus(statuses[0])
 
     # then
     assert filter_todos[0].id == items[0].id
@@ -51,34 +51,34 @@ def test_filterItemsByStatus_todos(view_model):
     assert filter_todos[1].title == items[3].title
 
 
-def test_filterItemsByStatus_doing(view_model):
+def test_filterItemsByStatus_doing(viewModel):
     # when
-    filter_doing = view_model.filterItemsByStatus(statuses[1])
+    filter_doing = viewModel.filterItemsByStatus(statuses[1])
 
     # then
     assert filter_doing[0].id == items[1].id
     assert filter_doing[0].title == items[1].title
 
 
-def test_filterItemsByStatus_done(view_model):
+def test_filterItemsByStatus_done(viewModel):
     # when
-    filter_done = view_model.filterItemsByStatus(statuses[2])
+    filter_done = viewModel.filterItemsByStatus(statuses[2])
 
     # then
     assert filter_done[0].id == items[2].id
     assert filter_done[0].title == items[2].title
 
 @pytest.mark.parametrize("title", ["To Do", "Doing", "Done"])
-def test_getStatusWithTitle(view_model, title):
+def test_getStatusWithTitle(viewModel, title):
     # when
-    status = view_model.getStatusWithTitle(title)
+    status = viewModel.getStatusWithTitle(title)
 
     # then
     assert status.title == title
 
-def test_getToDoItems(view_model):
+def test_getToDoItems(viewModel):
     # when
-    todo_items = view_model.getToDoItems()
+    todo_items = viewModel.getToDoItems()
     
     # then
     assert todo_items[0].id == items[0].id
@@ -86,17 +86,17 @@ def test_getToDoItems(view_model):
     assert todo_items[1].id == items[3].id
     assert todo_items[1].title == items[3].title
 
-def test_getDoingItems(view_model):
+def test_getDoingItems(viewModel):
     # when
-    doing_items = view_model.getDoingItems()
+    doing_items = viewModel.getDoingItems()
 
     # then
     assert doing_items[0].id == items[1].id
     assert doing_items[0].title == items[1].title
 
-def test_getAllDoneItems(view_model):
+def test_getAllDoneItems(viewModel):
     # when
-    done_items = view_model.getAllDoneItems()
+    done_items = viewModel.getAllDoneItems()
 
     # then
     assert done_items[0].id == items[2].id
@@ -105,10 +105,10 @@ def test_getAllDoneItems(view_model):
 def test_getDoneItems_lt5(done_items):
     # given (lt5 done items)
     lt5_done_items = done_items[:4]
-    lt5_done_view_model = ViewModel(lt5_done_items, statuses)
+    lt5_done_viewModel = ViewModel(lt5_done_items, statuses)
     
     # when
-    items = lt5_done_view_model.getDoneItems()
+    items = lt5_done_viewModel.getDoneItems()
 
     # then 
     assert len(items) == 4
@@ -116,10 +116,10 @@ def test_getDoneItems_lt5(done_items):
 
 def test_getDoneItems_today(done_items):
     # given (gt5 done items, _show_all_done_items has default value of False, and item[2] was done today)
-    today_done_view_model = ViewModel(done_items, statuses)
+    today_done_viewModel = ViewModel(done_items, statuses)
 
     # when
-    today_done_items = today_done_view_model.getDoneItems()
+    today_done_items = today_done_viewModel.getDoneItems()
 
     # then
     assert len(today_done_items) == 1
@@ -129,11 +129,11 @@ def test_getDoneItems_today(done_items):
 
 def test_getDoneItems_showAllDoneItems(done_items):
     # given (gt5 done items, and _show_all_done_items has value of True)
-    today_done_view_model = ViewModel(done_items, statuses)
-    today_done_view_model.show_all_done_items = True
+    today_done_viewModel = ViewModel(done_items, statuses)
+    today_done_viewModel.show_all_done_items = True
 
     # when
-    today_done_items = today_done_view_model.getDoneItems()
+    today_done_items = today_done_viewModel.getDoneItems()
 
     # then
     assert len(today_done_items) == 5
@@ -141,10 +141,10 @@ def test_getDoneItems_showAllDoneItems(done_items):
 
 def test_filterItemsByDoneDate_today(done_items):
     # given
-    done_view_model = ViewModel(done_items, statuses)
+    done_viewModel = ViewModel(done_items, statuses)
 
     # when
-    results = done_view_model.filterItemsByDoneDate(
+    results = done_viewModel.filterItemsByDoneDate(
         done_items, datetime.date.today())
 
     # then
@@ -154,11 +154,11 @@ def test_filterItemsByDoneDate_today(done_items):
 
 def test_filterItemsByDoneDate_yesterday(done_items):
     # given
-    done_view_model = ViewModel(done_items, statuses)
+    done_viewModel = ViewModel(done_items, statuses)
 
     # when
     yesterday = datetime.date.today() - datetime.timedelta(days=1)
-    results = done_view_model.filterItemsByDoneDate(done_items, yesterday)
+    results = done_viewModel.filterItemsByDoneDate(done_items, yesterday)
 
     # then
     assert len(results) == 4
