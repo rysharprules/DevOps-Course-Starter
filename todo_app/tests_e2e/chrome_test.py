@@ -1,7 +1,6 @@
 from threading import Thread
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
-from todo_app.ApiHelper import ApiHelper
 import pytest
 import dotenv
 import todo_app.app
@@ -16,7 +15,6 @@ def test_app():
     api = None
     with application.app_context():
         api = current_app.config.get('api')
-    api.board_id = api.create_trello_board('test_board_chrome')
     
     # start the app in its own thread
     thread = Thread(target=lambda: application.run(use_reloader=False))
@@ -26,8 +24,6 @@ def test_app():
 
     # tear down
     thread.join(1)
-    api.delete_trello_board(api.board_id)
-
 
 @pytest.fixture(scope="module")
 def driver():
