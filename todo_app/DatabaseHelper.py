@@ -1,4 +1,3 @@
-import todo_app
 from todo_app.Item import Item
 from todo_app.Status import Status
 from pymongo import MongoClient

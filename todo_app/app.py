@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 from todo_app.ViewModel import ViewModel
 from todo_app.DatabaseHelper import DatabaseHelper
 

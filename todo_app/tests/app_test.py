@@ -1,152 +1,50 @@
 import pytest
 import dotenv
 import todo_app.app
-import requests
 import json
+from todo_app.Item import Item
+from todo_app.Status import Status
+from todo_app.DatabaseHelper import DatabaseHelper
+
+statusesJson = './todo_app/tests/mock/statuses.json'
+itemsJson = './todo_app/tests/mock/items.json'
+mockTodo = "Buy recycled mango scented candles"
 
 @pytest.fixture
 def client():
     file_path = dotenv.find_dotenv('../.env.test')
     dotenv.load_dotenv(file_path, override=True)
-    test_app = todo_app.app.create_app()
-    with test_app.test_client() as client:
+    application = todo_app.app.create_app()
+    with application.test_client() as client:
         yield client
+    application.config['api'] = DatabaseHelper
 
-class MockStatusResponse:
+def mockStatuses():
+    statuses = []
+    with open(statusesJson, 'r') as jsonFile:
+        for data in json.load(jsonFile):
+            statuses.append(Status(data['_id'], data['name']))
+    return statuses
 
-    @staticmethod
-    def json():
-        with open('./todo_app/tests/mock/statuses.json', 'r') as json_file:
-            return json.load(json_file)
+def mockItems():
+    items = []
+    with open(itemsJson, 'r') as jsonFile:
+        for data in json.load(jsonFile):
+            item = Item(
+                data['_id'],
+                data['name'],
+                [status.title for status in mockStatuses() if data['status_ref']
+                 == status.id][0],
+                data['desc'],
+                data['due'],
+                data['last_activity']
+            )
+            items.append(item)
+    return items
 
-class MockItemResponse:
+def mockData(self):
+    return mockItems(), mockStatuses()
 
-    @staticmethod
-    def json():
-        with open('./todo_app/tests/mock/items.json', 'r') as json_file:
-            return json.load(json_file)
-
-def mock_get(*args, **kwargs):
-    if "lists" in args[0]:
-        return MockStatusResponse()
-    else:  # elif "cards" in args[0]:
-        return MockItemResponse()
-
-def test_index(monkeypatch, client):
-    # given
-    monkeypatch.setattr(requests, "get", mock_get)
-
-    # when
-    response = client.get('/')
-
-    # then
-    assert response.status_code == 200
-    assert "This task needs doing!" in str(response.data)
-
-def test_create(monkeypatch, client):
-    # given
-    args = []
-    test_title = 'test_title'
-    test_desc = 'test_desc'
-    test_due = 'test_due'
-    test_status = 'test_todo_status'
-    monkeypatch.setattr(requests, "post", lambda *a, **k: args.append(k['params']))
-    monkeypatch.setattr(requests, "get", mock_get)
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    params = {'title': test_title, 'desc': test_desc, 'due': test_due}
-
-    # when
-    response = client.post('/create', headers=headers, data=params)
-
-    # then
-    assert response.status_code == 200
-    assert len(args[0]) == 6 # includes key and token
-    assert args[0]['name'] == test_title
-    assert args[0]['desc'] == test_desc
-    assert args[0]['due'] == test_due
-    assert args[0]['idList'] == test_status
-    assert "This task needs doing!" in str(response.data)
-
-def test_update(monkeypatch, client):
-    # given
-    args = []
-    test_status = 'test_status'
-    monkeypatch.setattr(requests, "put", lambda *a, **k: args.append(k['params']))
-    monkeypatch.setattr(requests, "get", mock_get)
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    params = {'id': 'test_id', 'status': test_status}
-
-    # when
-    response = client.post('/update', headers=headers, data=params)
-
-    # then
-    assert response.status_code == 200
-    assert len(args[0]) == 3
-    assert args[0]['idList'] == test_status
-    assert "This task needs doing!" in str(response.data)
-
-def test_complete_item(monkeypatch, client):
-    # given
-    args = []
-    done_status = 'test_done_status'
-    monkeypatch.setattr(requests, "put", lambda *a, **
-                        k: args.append(k['params']))
-    monkeypatch.setattr(requests, "get", mock_get)
-
-    # when
-    response = client.get('/complete/test_id')
-
-    # then
-    assert response.status_code == 200
-    assert len(args[0]) == 3
-    assert args[0]['idList'] == done_status
-    assert "This task needs doing!" in str(response.data)
-
-def test_remove(monkeypatch, client):
-    # given
-    args = []
-    monkeypatch.setattr(requests, "delete", lambda *a, **
-                        k: args.append(k['params']))
-    monkeypatch.setattr(requests, "get", mock_get)
-
-    # when
-    response = client.get('/remove/test_id')
-
-    # then
-    assert response.status_code == 200
-    assert len(args[0]) == 2
-    assert "This task needs doing!" in str(response.data)
-
-def test_toggle_done(monkeypatch, client):
-    # given
-    monkeypatch.setattr(requests, "get", mock_get)
-
-    # when
-    response = client.get('/')
-
-    # then
-    assert "An old done item" not in str(response.data)
-    assert "Another old done item" not in str(response.data)
-    assert "A third old done item" not in str(response.data)
-    assert "A fourth old done item" not in str(response.data)
-    assert "One last old done item" not in str(response.data)
-    
-    # when
-    response = client.get('/toggle-done/true')
-
-    # then
-    assert "An old done item" in str(response.data)
-    assert "Another old done item" in str(response.data)
-    assert "A third old done item" in str(response.data)
-    assert "A fourth old done item" in str(response.data)
-    assert "One last old done item" in str(response.data)
-
-    # when
-    response = client.get('/toggle-done/false')
-
-    # then
-    assert "An old done item" not in str(response.data)
-    assert "Another old done item" not in str(response.data)
-    assert "A third old done item" not in str(response.data)
-    assert "A fourth old done item" not in str(response.data)
-    assert "One last old done item" not in str(response.data)
+def testIndex(monkeypatch, client):
+    monkeypatch.setattr(DatabaseHelper, 'getItemData', mockData)
+    assert mockTodo in client.get('/').data.decode()
