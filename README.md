@@ -25,6 +25,12 @@ To switch to use API call the appropriate Helper class in `app.py`. As a future 
 
 ### Run
 
+This application requires a collection to be available named `statuses` with three records:
+
+1. `{"_id":{"$oid":"60705b11cfc3999b2e0da2b8"},"name":"To Do"}`
+2. `{"_id":{"$oid":"60705b71cfc3999b2e0da2b9"},"name":"Doing"}`
+3. `{"_id":{"$oid":"60705b79cfc3999b2e0da2ba"},"name":"Done"}`
+
 Once the setup script has completed and all packages have been installed, start the Flask app by running:
 ```bash
 $ flask run
