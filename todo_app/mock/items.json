@@ -33,10 +33,18 @@
     },
     {
         "_id": "5f31a46df274ea6496f5b456",
-        "name": "Shake the hand of a customer",
+        "name": "An old done item",
         "desc": "",
-        "due": "2020-08-27T16:07:39.306Z",
+        "due": "2020-01-27T16:07:35.345Z",
         "status_ref": "60705b79cfc3999b2e0da2ba",
-        "last_activity": "2020-08-27T16:07:39.306Z"
+        "last_activity": "2020-01-27T16:07:35.345Z"
+    },
+    {
+        "_id": "5f31a46df274ea6496f5b457",
+        "name": "A done item",
+        "desc": "",
+        "due": "2025-08-27T16:07:39.306Z",
+        "status_ref": "60705b79cfc3999b2e0da2ba",
+        "last_activity": "2025-08-27T16:07:39.306Z"
     }
 ]

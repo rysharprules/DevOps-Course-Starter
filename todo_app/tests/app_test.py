@@ -1,14 +1,11 @@
 import pytest
 import dotenv
 import todo_app.app
-import json
-from todo_app.Item import Item
-from todo_app.Status import Status
 from todo_app.DatabaseHelper import DatabaseHelper
+from todo_app.mock.DatabaseMockHelper import DatabaseMockHelper
 
-statusesJson = './todo_app/tests/mock/statuses.json'
-itemsJson = './todo_app/tests/mock/items.json'
 mockTodo = "Buy recycled mango scented candles"
+mockHelper = DatabaseMockHelper()
 
 @pytest.fixture
 def client():
@@ -19,32 +16,52 @@ def client():
         yield client
     application.config['api'] = DatabaseHelper
 
-def mockStatuses():
-    statuses = []
-    with open(statusesJson, 'r') as jsonFile:
-        for data in json.load(jsonFile):
-            statuses.append(Status(data['_id'], data['name']))
-    return statuses
-
-def mockItems():
-    items = []
-    with open(itemsJson, 'r') as jsonFile:
-        for data in json.load(jsonFile):
-            item = Item(
-                data['_id'],
-                data['name'],
-                [status.title for status in mockStatuses() if data['status_ref']
-                 == status.id][0],
-                data['desc'],
-                data['due'],
-                data['last_activity']
-            )
-            items.append(item)
-    return items
-
-def mockData(self):
-    return mockItems(), mockStatuses()
-
 def testIndex(monkeypatch, client):
-    monkeypatch.setattr(DatabaseHelper, 'getItemData', mockData)
-    assert mockTodo in client.get('/').data.decode()
+    monkeypatch.setattr(DatabaseHelper, 'getItemData', mockHelper.mockData)
+    assert mockTodo in str(client.get('/').data)
+
+def testCreate(monkeypatch, client):
+    # given
+    test_title = 'test_title'
+    test_desc = 'test_desc'
+    test_due = 'test_due'
+    monkeypatch.setattr(DatabaseHelper, 'getItemData', mockHelper.mockData)
+    monkeypatch.setattr(DatabaseHelper, 'createItem', lambda a,b,c,d: None)
+
+    # when
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    params = {'title': test_title, 'desc': test_desc, 'due': test_due}
+    response = client.post('/create', headers=headers, data=params)
+
+    # then
+    assert response.status_code == 200
+    assert mockTodo in str(response.data)
+
+
+def testUpdate(monkeypatch, client):
+    # given
+    test_status = 'test_status'
+    monkeypatch.setattr(DatabaseHelper, 'getItemData', mockHelper.mockData)
+    monkeypatch.setattr(DatabaseHelper, 'updateItem', lambda a,b,c: None)
+
+    # when
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    params = {'id': 'test_id', 'status': test_status}
+    response = client.post('/update', headers=headers, data=params)
+
+    # then
+    assert response.status_code == 200
+    assert mockTodo in str(response.data)
+
+
+def testRemove(monkeypatch, client):
+    # given
+    monkeypatch.setattr(DatabaseHelper, 'getItemData', mockHelper.mockData)
+    monkeypatch.setattr(DatabaseHelper, 'removeItem', lambda a,b: None)
+
+    # when
+    response = client.get('/remove/test_id')
+
+    # then
+    assert response.status_code == 200
+    assert mockTodo in str(response.data)
