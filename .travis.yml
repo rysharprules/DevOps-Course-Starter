@@ -15,7 +15,7 @@ before_script:
 script:
 - docker build --target test -t todo-app .
 - docker run todo-app todo_app/tests/
-- docker run todo_app/tests_e2e/
+- docker run todo-app todo_app/tests_e2e/
 deploy:
   provider: script
   script: bash deploy.sh
