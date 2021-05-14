@@ -52,41 +52,43 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <h2>Create an item</h2>
-    <form action="/create" method="POST" autocomplete="off">
-      <div class="form-group">
-        <fieldset>
-          <legend>New item details:</legend>
-          <div class="form-row">
-            <label class="col-sm-2 col-form-label" for="title">Title:</label>
-            <div class="form-group col-md-6">
-              <input required class="form-control" type="text" id="title" name="title" maxlength="280" placeholder="New to-do item">
+{% if current_user.isWriter %}
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Create an item</h2>
+      <form action="/create" method="POST" autocomplete="off">
+        <div class="form-group">
+          <fieldset>
+            <legend>New item details:</legend>
+            <div class="form-row">
+              <label class="col-sm-2 col-form-label" for="title">Title:</label>
+              <div class="form-group col-md-6">
+                <input required class="form-control" type="text" id="title" name="title" maxlength="280" placeholder="New to-do item">
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <label class="col-sm-2 col-form-label" for="desc">Description (Optional):</label>
-            <div class="form-group col-md-6">
-              <textarea class="form-control" type="text" id="desc" name="desc" rows="3" cols="80" maxlength="280"></textarea>
+            <div class="form-row">
+              <label class="col-sm-2 col-form-label" for="desc">Description (Optional):</label>
+              <div class="form-group col-md-6">
+                <textarea class="form-control" type="text" id="desc" name="desc" rows="3" cols="80" maxlength="280"></textarea>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <label class="col-sm-2 col-form-label" for="due">Due date (Optional):</label>
-            <div class="form-group col-md-6">
-              <div class="input-group date">
-                <div class="col-xs-2">
-                  <input id="due" name="due" type="text" class="form-control cal-icon" placeholder="mm/dd/yyyy">
+            <div class="form-row">
+              <label class="col-sm-2 col-form-label" for="due">Due date (Optional):</label>
+              <div class="form-group col-md-6">
+                <div class="input-group date">
+                  <div class="col-xs-2">
+                    <input id="due" name="due" type="text" class="form-control cal-icon" placeholder="mm/dd/yyyy">
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <button class="btn btn-dark" type="submit" name="submit-item">Submit</button>
-        </fieldset>
-      </div>
-    </form>
+            <button class="btn btn-dark" type="submit" name="submit-item">Submit</button>
+          </fieldset>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+{% endif %}
 
 <script>
   $("#due").datepicker({

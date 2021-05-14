@@ -22,17 +22,21 @@
                     <span class="fas fa-calendar-alt"></span>
                     {{ item.getFormattedDueDate() }}
                 </div>
-                <div class="item-complete">
-                    <a href="/complete/{{ item.id }}" name="item-complete-link">
-                        <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" title="Complete item" /> Complete
+                {% if current_user.isWriter %}
+                    <div class="item-complete">
+                        <a href="/complete/{{ item.id }}" name="item-complete-link">
+                            <img src="{{url_for('static', filename='img/tick.png')}}" alt="Complete item" title="Complete item" /> Complete
+                        </a>
+                    </div>
+                {% endif %}
+            {% endif %}
+            {% if current_user.isWriter %}
+                <div class="item-remove">
+                    <a href="/remove/{{ item.id }}">
+                        <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" title="Remove item" /> Remove
                     </a>
                 </div>
             {% endif %}
-            <div class="item-remove">
-                <a href="/remove/{{ item.id }}">
-                    <img src="{{url_for('static', filename='img/remove.png')}}" alt="Remove item" title="Remove item" /> Remove
-                </a>
-            </div>
         </div>
     </form>
 </div>
