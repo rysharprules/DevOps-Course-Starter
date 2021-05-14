@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect
-from flask_login import login_required, login_user
+from flask_login import login_required, login_user, current_user
 from todo_app.ViewModel import ViewModel
 from todo_app.DatabaseHelper import DatabaseHelper
 from todo_app.User import User
 from oauthlib.oauth2 import WebApplicationClient
 import todo_app.login_manager as login_manager
-import requests
+import requests, sys
 
 viewModel = None
 
@@ -16,6 +16,15 @@ def create_app():
         "DATABASE_NAME"))
     api = app.config['api']
     login_manager.login_manager.init_app(app)
+
+    def checkRole(f):
+        def wrap(*args, **kwargs):
+            if current_user.role == "writer":
+                return f(*args, **kwargs)
+            else:
+                return index()
+        wrap.__name__ = f.__name__
+        return wrap
 
     @app.route('/')
     @login_required
@@ -28,24 +37,26 @@ def create_app():
         )
 
     @app.route('/create', methods=['POST'])
-    @login_required
+    @checkRole
     def create():
         api.createItem(request.form['title'],
                        request.form['desc'], request.form['due'])
         return index()
 
     @app.route('/update', methods=['POST'])
-    @login_required
+    @checkRole
     def update():
         api.updateItem(request.form['id'], request.form['status'])
         return index()
 
     @app.route('/complete/<id>')
+    @checkRole
     def completeItem(id):
         api.updateItem(id, api.getStatusIdForTitle('Done'))
         return index()
 
     @app.route('/remove/<id>')
+    @checkRole
     def remove(id):
         api.removeItem(id)
         return index()
@@ -67,7 +78,7 @@ def create_app():
         params = client.add_token("https://api.github.com/user")
         github_user = requests.get(params[0], headers=params[1]).json()
         login_user(User(github_user['id']))
-        return redirect('/')
+        return index()
     
     return app
 
