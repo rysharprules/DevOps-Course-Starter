@@ -1,6 +1,7 @@
 from flask_login import LoginManager
 from flask import redirect, current_app as app
 from oauthlib.oauth2 import WebApplicationClient
+from todo_app.User import User
 
 login_manager = LoginManager()
 
@@ -11,4 +12,4 @@ def unauthenticated():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return None
+    return User(user_id)
