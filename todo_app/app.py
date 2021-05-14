@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
+from flask_login import login_required
 from todo_app.ViewModel import ViewModel
 from todo_app.DatabaseHelper import DatabaseHelper
+from oauthlib.oauth2 import WebApplicationClient
+import todo_app.login_manager as login_manager
 
 viewModel = None
 
@@ -10,6 +13,7 @@ def create_app():
     app.config['api'] = DatabaseHelper(app.config.get("DATABASE_URL"), app.config.get(
         "DATABASE_NAME"))
     api = app.config['api']
+    login_manager.login_manager.init_app(app)
 
     @app.route('/')
     def index():
@@ -21,12 +25,14 @@ def create_app():
         )
 
     @app.route('/create', methods=['POST'])
+    @login_required
     def create():
         api.createItem(request.form['title'],
                        request.form['desc'], request.form['due'])
         return index()
 
     @app.route('/update', methods=['POST'])
+    @login_required
     def update():
         api.updateItem(request.form['id'], request.form['status'])
         return index()
