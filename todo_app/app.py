@@ -5,7 +5,7 @@ from todo_app.DatabaseHelper import DatabaseHelper
 from todo_app.User import User
 from oauthlib.oauth2 import WebApplicationClient
 import todo_app.login_manager as login_manager
-import requests, sys
+import requests
 
 viewModel = None
 
@@ -19,7 +19,7 @@ def create_app():
 
     def checkRole(f):
         def wrap(*args, **kwargs):
-            if current_user.role == "writer":
+            if hasattr(current_user, 'role') and current_user.role == "writer":
                 return f(*args, **kwargs)
             else:
                 return index()
@@ -33,7 +33,8 @@ def create_app():
         viewModel = ViewModel(*api.getItemData())
         return render_template(
             'index.html',
-            viewModel=viewModel
+            viewModel=viewModel,
+            isWriter=True if app.config.get("LOGIN_DISABLED") == "True" else current_user.isWriter
         )
 
     @app.route('/create', methods=['POST'])
