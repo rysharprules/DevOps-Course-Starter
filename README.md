@@ -207,8 +207,8 @@ The application can run with Docker.
 1. Create a docker image with name and tag targetted for `prod`: 
    - `docker build --target prod -t todo-app:prod .`
 2. Run the container with specified `.env` file and assigned the port: 
-   - `docker run --env-file .env -p 8000:8000 todo-app:prod`
-3. The application will now be available in [localhost with port 8000](http://localhost:8000)
+   - `docker run --env-file .env -p 5000:5000 todo-app:prod`
+3. The application will now be available in [localhost with port 5000](http://localhost:5000)
 
 #### Test
 
