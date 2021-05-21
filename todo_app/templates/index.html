@@ -17,7 +17,7 @@
           <th>
             Done
             <div class="toggle-done">
-              {% if view_model.show_all_done_items %}
+              {% if viewModel.show_all_done_items %}
                 <a href="/toggle-done/false"><span class="fas fa-eye-slash"></span> Hide old done items</a>
               {% else %}
                 <a href="/toggle-done/true"><span class="fas fa-eye"></span> Show all done items</a>
@@ -27,20 +27,20 @@
         </thead>
           <tbody>
               <tr>
-                {% for status in view_model.getBoardStatuses() %}
+                {% for status in viewModel.getBoardStatuses() %}
                   <td class="status-col" id="{{ status.id }}" name="status-col-{{ status.title }}">
                     {% if status.title == 'To Do' %}
-                      {% for item in view_model.getToDoItems() %}
+                      {% for item in viewModel.getToDoItems() %}
                         {% include 'item.html' %}
                       {% endfor %}
                     {% endif %}
                     {% if status.title == 'Doing' %}
-                      {% for item in view_model.getDoingItems() %}
+                      {% for item in viewModel.getDoingItems() %}
                         {% include 'item.html' %}
                       {% endfor %}
                     {% endif %}
                     {% if status.title == 'Done' %}
-                      {% for item in view_model.getDoneItems() %}
+                      {% for item in viewModel.getDoneItems() %}
                         {% include 'item.html' %}
                       {% endfor %}
                     {% endif %}

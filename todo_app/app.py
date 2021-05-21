@@ -1,25 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 from todo_app.ViewModel import ViewModel
-from todo_app.ApiHelper import ApiHelper
-import sys
-import os
+from todo_app.DatabaseHelper import DatabaseHelper
 
-view_model = None
+viewModel = None
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('settings.py')
-    app.config['api'] = ApiHelper(app.config.get("BASE_URI"), app.config.get(
-        "QUERY"), app.config.get("BOARD_ID"))
+    app.config['api'] = DatabaseHelper(app.config.get("DATABASE_URL"), app.config.get(
+        "DATABASE_NAME"))
     api = app.config['api']
 
     @app.route('/')
     def index():
-        global view_model
-        view_model = ViewModel(*api.getItemData())
+        global viewModel
+        viewModel = ViewModel(*api.getItemData())
         return render_template(
             'index.html',
-            view_model=view_model
+            viewModel=viewModel
         )
 
     @app.route('/create', methods=['POST'])
@@ -34,7 +32,7 @@ def create_app():
         return index()
 
     @app.route('/complete/<id>')
-    def complete_item(id):
+    def completeItem(id):
         api.updateItem(id, api.getStatusIdForTitle('Done'))
         return index()
 
@@ -44,11 +42,11 @@ def create_app():
         return index()
 
     @app.route('/toggle-done/<toggle>')
-    def toggle_done(toggle):
-        view_model.show_all_done_items = toggle == 'true'
+    def toggleDone(toggle):
+        viewModel.show_all_done_items = toggle == 'true'
         return render_template(
             'index.html',
-            view_model=view_model
+            viewModel=viewModel
         )
     
     return app

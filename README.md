@@ -4,13 +4,32 @@
 
 ### Environment variables
 
-To run effectively, copy the `.env.template` file and rename to `.env`. Update the `.env` file with your application details:
+This application can run via API or database. The `ApiHelper` is configured to support the Trello API whilst the `DatabaseHelper` supports MongoDB from Atlas.
+
+**The application default is database.**
+
+To run effectively, copy the `.env.template` file and rename to `.env`. Update the `.env` file with your application details,
+
+For API based application:
 
 1. `API_KEY` - Used to call the [Trello](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) API
-1. `API_TOKEN` - Used to call the [Trello](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) API
-1. `BOARD_ID` - An ID reference to the [board](https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-get) on Trello
+2. `API_TOKEN` - Used to call the [Trello](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) API
+3. `BOARD_ID` - An ID reference to the [board](https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-get) on Trello
+
+For database based application:
+
+1. `DATABASE_URL` - URL to your database
+1. `DATABASE_NAME` - Name of your database
+
+To switch to use API call the appropriate Helper class in `app.py`. As a future enhancement the Ryan's Todo app team may add an envvar which will allow the user to declare whether to run the application with API or database, e.g. `TYPE=API` or `TYPE=DB`, defaulting to `DB` if incorrect value added. This can also provide a backup source if a system is down.
 
 ### Run
+
+This application requires a collection to be available named `statuses` with three records:
+
+1. `{"_id":{"$oid":"60705b11cfc3999b2e0da2b8"},"name":"To Do"}`
+2. `{"_id":{"$oid":"60705b71cfc3999b2e0da2b9"},"name":"Doing"}`
+3. `{"_id":{"$oid":"60705b79cfc3999b2e0da2ba"},"name":"Done"}`
 
 Once the setup script has completed and all packages have been installed, start the Flask app by running:
 ```bash
@@ -43,7 +62,7 @@ $ pytest todo_app\tests\
 
 #### Integration testing
 
-Tests are also available in Chrome. You will need Chrome version 88.
+Tests are also available in Chrome. You will need Chrome version 90.
 
 To run Chrome tests use the command:
 

@@ -15,8 +15,7 @@ CMD ["poetry", "run", "flask", "run", "-h", "0.0.0.0"]
 FROM base AS prod
 COPY . /app
 WORKDIR /app
-EXPOSE 5000
-ENV PORT=${PORT}
+ENV PORT=5000
 ENTRYPOINT ["sh", "entrypoint.sh"]
 
 FROM base AS test
