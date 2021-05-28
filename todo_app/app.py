@@ -17,7 +17,7 @@ def create_app():
     api = app.config['api']
     login_manager.login_manager.init_app(app)
 
-    def checkRole(f):
+    def check_role(f):
         def wrap(*args, **kwargs):
             if hasattr(current_user, 'role') and current_user.role == "writer":
                 return f(*args, **kwargs)
@@ -38,26 +38,26 @@ def create_app():
         )
 
     @app.route('/create', methods=['POST'])
-    @checkRole
+    @check_role
     def create():
         api.createItem(request.form['title'],
                        request.form['desc'], request.form['due'])
         return index()
 
     @app.route('/update', methods=['POST'])
-    @checkRole
+    @check_role
     def update():
         api.updateItem(request.form['id'], request.form['status'])
         return index()
 
     @app.route('/complete/<id>')
-    @checkRole
+    @check_role
     def completeItem(id):
         api.updateItem(id, api.getStatusIdForTitle('Done'))
         return index()
 
     @app.route('/remove/<id>')
-    @checkRole
+    @check_role
     def remove(id):
         api.removeItem(id)
         return index()
