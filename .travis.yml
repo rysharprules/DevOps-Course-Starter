@@ -8,12 +8,12 @@ env:
   - DATABASE_NAME=tododb
 before_script:
 - echo "$DOCKERHUB_PW" | docker login --username $DOCKERHUB_USER --password-stdin
-- docker login -u=_ -p=$HEROKU_API_KEY registry.heroku.com
 script:
 - docker build --target test -t todo-app .
 - docker run todo-app todo_app/tests/
 - docker run todo-app todo_app/tests_e2e/
-- docker build --target production --tag $DOCKERHUB_USER/todo-app:latest .  
+before_deploy:
+- docker build --target prod -t $DOCKERHUB_USER/todo-app:latest .  
 - docker push $DOCKERHUB_USER/todo-app:latest
 deploy:
   provider: script
