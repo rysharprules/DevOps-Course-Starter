@@ -17,7 +17,8 @@ before_deploy:
 - docker push $DOCKERHUB_USER/todo-app:latest
 deploy:
   provider: script
-  script: bash deploy.sh
+  script:
+    - curl -dH -X POST "$AZURE_WEBHOOK"
   on:
     branch: master
 notifications:
