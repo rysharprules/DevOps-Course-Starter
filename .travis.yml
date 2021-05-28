@@ -20,6 +20,6 @@ deploy:
   script:
     - curl -dH -X POST "$AZURE_WEBHOOK"
   on:
-    branch: master
+    branch: exercise-11
 notifications:
   email: false
