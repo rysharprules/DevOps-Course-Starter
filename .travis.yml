@@ -14,7 +14,7 @@ script:
 - docker run todo-app todo_app/tests/
 - docker run todo-app todo_app/tests_e2e/
 - docker build --target production --tag $DOCKERHUB_USER/todo-app:latest .  
-- docker push $DOCKER_USER/todo-app:latest
+- docker push $DOCKERHUB_USER/todo-app:latest
 deploy:
   provider: script
   script: bash deploy.sh
