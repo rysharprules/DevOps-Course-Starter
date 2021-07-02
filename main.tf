@@ -15,7 +15,7 @@ data "azurerm_resource_group" "main" {
 
 resource "azurerm_app_service_plan" "main" {
     name = "terraformed-asp"
-    location = data.azurerm_resource_group.main.location
+    location = var.LOCATION
     resource_group_name = data.azurerm_resource_group.main.name
     kind = "Linux"
     reserved = true
@@ -27,7 +27,7 @@ resource "azurerm_app_service_plan" "main" {
 
 resource "azurerm_app_service" "main" {
     name = "rysharp-terraform-todoapp"
-    location = data.azurerm_resource_group.main.location
+    location = var.LOCATION
     resource_group_name = data.azurerm_resource_group.main.name
     app_service_plan_id = azurerm_app_service_plan.main.id
     site_config {
@@ -35,15 +35,15 @@ resource "azurerm_app_service" "main" {
         linux_fx_version = "DOCKER|rysharp/todo-app:latest"
     }
     app_settings = {
-        "MONGODB_CONNECTION_STRING" = "mongodb://${azurerm_cosmosdb_account.main.name}:${azurerm_cosmosdb_account.main.primary_key}@${azurerm_cosmosdb_account.main.name}.mongo.cosmos.azure.com:10255/DefaultDatabase?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000"
+        "MONGODB_CONNECTION_STRING" = "mongodb://${azurerm_cosmosdb_account.maindbaccount.name}:${azurerm_cosmosdb_account.maindbaccount.primary_key}@${azurerm_cosmosdb_account.maindbaccount.name}.mongo.cosmos.azure.com:10255/DefaultDatabase?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000"
         "DOCKER_REGISTRY_SERVER_URL" = "https://index.docker.io"
-        "client_id" = var.client_id
-        "client_secret" = var.client_secret
+        "CLIENT_ID" = var.CLIENT_ID
+        "CLIENT_SECRET" = var.CLIENT_SECRET
         "DOCKER_ENABLE_CI" = "true"
         "DOCKER_REGISTRY_SERVER_URL" = "https://index.docker.io/v1"
         "FLASK_APP" = "todo_app.app"
         "FLASK_ENV" = "production"
-        "SECRET_KEY" = "Shhh"
+        "SECRET_KEY" = var.SECRET_KEY
         "OAUTHLIB_INSECURE_TRANSPORT"="1"
     }
 }
@@ -51,7 +51,7 @@ resource "azurerm_app_service" "main" {
 resource "azurerm_cosmosdb_account" "maindbaccount" {
   name                = "rysharp"
   resource_group_name = data.azurerm_resource_group.main.name
-  location            = data.azurerm_resource_group.main.location
+  location            = var.LOCATION
   offer_type          = "Standard"
   kind                = "MongoDB"
 
@@ -67,7 +67,7 @@ resource "azurerm_cosmosdb_account" "maindbaccount" {
     max_staleness_prefix    = 200
   }
   geo_location {
-    location          = data.azurerm_resource_group.main.location
+    location          = var.LOCATION
     failover_priority = 0
   }
   lifecycle {
