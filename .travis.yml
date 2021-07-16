@@ -6,19 +6,27 @@ env:
   - secure: qCph7DE2ED4FLfpoB/jYX4U1W8yo/BrbmgVqpEEVHsH15cevkUCW48A3em9x0NeOcgpZdupPKsBdxCaUmT3BEajatarsa9VHGhJ064xZVrkpdurKHJuh2p6xzJhhXPzNfsGu/TMl/h9qJqUcNTsEQEd636UvfTG023VdmB+gDsHHrNRFtEyaRhMhJIpDH7r2Ym6WE9JWxPQA2wPDI9PblbEG+Y8jyJZV1vc+WaafMR39JpSWUCZG9V7RXqICH9foP50GSfsfxvCtBoylfKFeAEAbil2nUtARMviKgo1zOFn3lxfRgXfTITORXfR8MkM17qErlAAfe6mFjf75GmxBJ8iKvdGam4uFCiRlpZN2ImkDAOY/F+ejipsFHs5LJIS2nXdSRJ+IwkooDMsEp0IXenV/MyE6WAlHPJ9T5hajTRxG9kK71VweyFfUi/DTx2lO3rsTZUG8ztwo73UYuIJhADuGhMveaZ6IQVSObbFBoaQ5EsXh5xLkH0oAvZFTAo/jRWb6c4KaoWnPG5hdqb0Lfl3o2sP60EtHVI60hjnuRCnPt58rmZFcvSNmCUMgOYkOVtyNIzU7aRspTLyXUF48EPnTlH9USQXjLiO6DM0kSGjBMO5fgN8TXa7gTfL6KyTUGKLhWM6kNimk88THToQEQhOqzDRyPYFZAiwpEakveY0=
   - secure: IM8D2CYyPOwYihG14eV5Vkg74xu9LuWIIK1UZl4wUx7MKAj/1J25Yhmlc4WQzBoQO+ZYm4h/mMaqAf6K5KGcJzSSbDcUTS618VZnhRBoF5hvMSWJdH4v8WvkAVZ29Tk9LkJHu32ARr/GpZxGmHAIHS4SJ8FWu04BF831x9swV0vWVa8X+Ggh61egdwyWXh4CnKZTk9jKf7FArv9DbtSUnStoylgZeIuC4/MU8rmmOy4DBEv3kD7EfnAuT4hVuV4790j/BNkR4sYOldu+wFvTFTZTP/ftcdZIUDKHWneev/YDZoMCwrcVUld/atiQOwwcNxq2b8E1PsEsHsogV2cPF1B7I6J8UPbip7mjoD2ly1gXm0KVE3nijdI4HFEcx7p6b++IpFWkAL9ZMSS5AGyv6W+pi6vzoeVNaZvCo46Cmu/ZJ4GB6lF98AoBJboy1R/aMVjgCIwfJdXCgcjQDHjPFWZHXJF25b88hQSFk502AzzijFc0DUwc4q/KrZx/m/XnIIHBnK02AzlzwHV23zV7kXdszNli6s1XXjMVZZZsCBmDZYmwJ5WnbketT6k2WXarlLRkqEx46fGTCWo1X5TQuqXgdPcUYzIT/A2sHJwvCSZ0KYhfQ7KccL1N6KMKCKOA9sfH0K88V8d+nAkHEQS0/FV2PmWgtBhgYRb1nicVxYg=
   - DATABASE_NAME=tododb
+  - TF_VERSION=0.14.7
 before_script:
 - echo "$DOCKERHUB_PW" | docker login --username $DOCKERHUB_USER --password-stdin
 script:
 - docker build --target test -t todo-app .
 - docker run todo-app todo_app/tests/
 - docker run todo-app todo_app/tests_e2e/
+install:
+- wget https://releases.hashicorp.com/terraform/"$TF_VERSION"/terraform_"$TF_VERSION"_linux_amd64.zip
+- unzip terraform_"$TF_VERSION"_linux_amd64.zip
+- sudo mv terraform /usr/local/bin/
+- rm terraform_"$TF_VERSION"_linux_amd64.zip
+- terraform init
 before_deploy:
 - docker build --target prod -t $DOCKERHUB_USER/todo-app:latest .  
 - docker push $DOCKERHUB_USER/todo-app:latest
+- terraform apply -var 'CLIENT_ID=$CLIENT_ID' -var 'CLIENT_SECRET=$CLIENT_SECRET' -auto-approve
 deploy:
   provider: script
   script:
-    - curl -dH -X POST "$AZURE_WEBHOOK"
+    - bash ./travis_deploy.sh
   on:
     branch: master
 notifications:
