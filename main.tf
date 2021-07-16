@@ -1,4 +1,10 @@
 terraform {
+    backend "azurerm" {
+      resource_group_name   = "AmericanExpress1_RyanSharp_ProjectExercise"
+      storage_account_name  = "rysharpstorage"
+      container_name        = "tododb"
+      key                   = "https://ryvault.vault.azure.net/secrets/ARM-ACCESS-KEY/edbab94b287442cc89ec22a21a1c3e6a"
+    }
     required_providers {
         azurerm = {
             source = "hashicorp/azurerm"
@@ -69,9 +75,6 @@ resource "azurerm_cosmosdb_account" "maindbaccount" {
   geo_location {
     location          = var.LOCATION
     failover_priority = 0
-  }
-  lifecycle {
-    prevent_destroy = true
   }
 }
 
